@@ -30,6 +30,14 @@ builder.Services.AddScoped<BidService>();
 builder.Services.AddScoped<AuctionService>();
 builder.Services.AddScoped<WatchlistService>();
 
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IBidHistoryService, BidHistoryService>();
+builder.Services.AddScoped<IWatchlistService, WatchlistService>();
+
+// Inject the correct BraintreeService
+builder.Services.AddTransient<IBraintreeService, PrimeBidAPI.Services.BraintreeService>();
+
+
 // Swagger for API documentation
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
