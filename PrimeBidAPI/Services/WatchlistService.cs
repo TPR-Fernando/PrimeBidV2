@@ -1,22 +1,41 @@
-﻿using PrimeBidAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PrimeBidAPI.Data;
+using PrimeBidAPI.Models;
 
 namespace PrimeBidAPI.Services
 {
-    public class WatchlistService
+    public class WatchlistService : IWatchlistService
     {
-        internal async Task<bool> AddToWatchlistAsync(string userId, object productId)
+        private readonly AuctionDbContext _context;
+
+        public WatchlistService(AuctionDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        internal async Task<WatchList> GetWatchlistAsync(string userId)
+        public async Task<List<WatchlistModel>> GetWatchlistAsync(int userId)
         {
-            throw new NotImplementedException();
+            return await _context.Watchlists
+                                 .Where(item => item.Id == userId)
+                                 .ToListAsync();
         }
 
-        internal async Task<bool> RemoveFromWatchlistAsync(string userId, string productId)
+        public async Task AddToWatchlistAsync(int userId, WatchlistModel item)
         {
-            throw new NotImplementedException();
+            item.Id = userId; // Associate the item with the user
+            await _context.Watchlists.AddAsync(item);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveFromWatchlistAsync(int userId, int itemId)
+        {
+            var item = await _context.Watchlists
+                                     .FirstOrDefaultAsync(w => w.Id == itemId && w.Id == userId);
+            if (item != null)
+            {
+                _context.Watchlists.Remove(item);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

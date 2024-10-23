@@ -1,0 +1,160 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0E2033',
+                        frosted: 'rgba(255, 255, 255, 0.1)',
+                        accent: '#c7ffd8',
+                        textWhite: '#FFFFFF',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'fade-in-up': 'fadeInUp 0.6s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(50px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-[#0E2033] text-textWhite min-h-screen">
+<div class="flex flex-col md:flex-row min-h-screen">
+    <div class="backdrop-blur-md bg-frosted md:w-64 p-6 space-y-6 shadow-xl rounded-lg m-4 transition-transform duration-500 transform hover:scale-105">
+        <h2 class="text-3xl font-bold text-center">Menu</h2>
+        <ul class="space-y-4">
+            <li class="transform hover:scale-110 transition-transform duration-300"><a href="profile.html" class="block py-2 px-4 bg-frosted hover:bg-accent hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Profile</a></li>
+            <li class="transform hover:scale-110 transition-transform duration-300"><a href="bidhistory.html" class="block py-2 px-4 bg-frosted hover:bg-accent hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Bid History</a></li>
+            <li class="transform hover:scale-110 transition-transform duration-300"><a href="watchlist.html" class="block py-2 px-4 bg-frosted hover:bg-accent hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Watchlist</a></li>
+        </ul>
+        <button class="w-full bg-red-600 py-3 rounded-lg hover:bg-red-700 transition-colors duration-200 shadow-lg">Logout</button>
+    </div>
+
+    <div class="flex-grow p-6 animate-fade-in-up">
+        <h3 class="text-4xl font-bold mb-6">Profile</h3>
+
+        <div class="profile-header flex items-center space-x-6 mb-8">
+            <div class="rounded-full overflow-hidden shadow-lg">
+                <img src="https://nwestco.com/wp-content/uploads/2016/08/13.jpg" alt="Profile Picture" class="w-24 h-24 object-cover">
+            </div>
+            <div>
+                <p class="text-2xl font-semibold" id="profile-name"></p>
+                <button class="bg-accent text-black py-2 px-4 rounded-lg shadow-lg hover:bg-accent-light transition-colors duration-200" id="editProfileBtn">Edit Profile</button>
+            </div>
+        </div>
+
+        <div class="user-details backdrop-blur-md bg-frosted p-6 rounded-lg shadow-xl">
+            <h4 class="text-2xl font-semibold mb-4">Account Information</h4>
+
+            <form id="profile-form" class="space-y-4">
+                <div class="flex flex-col space-y-2">
+                    <label for="fullName" class="text-gray-300">Full Name:</label>
+                    <input type="text" id="fullName" required class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite">
+                </div>
+
+                <div class="flex flex-col space-y-2">
+                    <label for="email" class="text-gray-300">Email:</label>
+                    <input type="email" id="email" required class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite">
+                </div>
+
+                <div class="flex flex-col space-y-2">
+                    <label for="address" class="text-gray-300">Shipping Address:</label>
+                    <input type="text" id="address" required class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite">
+                </div>
+
+                <div class="flex flex-col space-y-2">
+                    <label for="phoneNumber" class="text-gray-300">Phone Number:</label>
+                    <input type="text" id="phoneNumber" required class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite">
+                </div>
+
+                <div class="flex space-x-4 mt-6">
+                    <button type="submit" class="bg-accent text-black py-2 px-4 rounded-lg shadow-lg hover:bg-accent-light transition-colors duration-200">Save Changes</button>
+                    <button type="button" class="bg-red-600 py-2 px-4 rounded-lg shadow-lg hover:bg-red-700 transition-colors duration-200" id="cancelEditBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Replace '/api/profile/' with your backend URL
+async function getProfile(userId) {
+    try {
+        const response = await fetch(`https://localhost:7217/api/profile/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const profile = await response.json();
+        
+        if (profile) {
+            document.getElementById("profile-name").textContent = profile.fullName;
+            document.getElementById("profile-email").textContent = profile.email;
+            document.getElementById("profile-address").textContent = profile.address;
+            document.getElementById("profile-phone").textContent = profile.phoneNumber;
+        } else {
+            alert("Profile not found");
+        }
+    } catch (error) {
+        console.error('Error fetching profile:', error);
+    }
+}
+
+
+// Handle profile form submission (updating profile)
+document.getElementById("profile-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const profileData = {
+        fullName: document.getElementById("fullName").value,
+        email: document.getElementById("email").value,
+        address: document.getElementById("address").value,
+        phoneNumber: document.getElementById("phoneNumber").value
+    };
+
+    try {
+        const response = await fetch(`https://localhost:7217/api/profile/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(profileData)
+        });
+
+        if (response.ok) {
+            alert("Profile updated successfully!");
+        } else {
+            alert("Failed to update profile.");
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+    }
+});
+
+// Example usage
+getProfile(1); // Call with the actual userId
+</script>
+
+</body>
+</html>
