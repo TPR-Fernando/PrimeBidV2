@@ -29,8 +29,7 @@ namespace PrimeBidAPI.Services
             {
                 _logger.LogWarning("Product with ID: {ProductId} not found.", id);
             }
-
-            return product;
+                return product;
         }
     }
 }
