@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,13 +50,22 @@
     <div class="flex-grow p-6 animate-fade-in-up">
         <h3 class="text-4xl font-bold mb-6">Profile</h3>
 
-        <div class="profile-header flex items-center space-x-6 mb-8">
-            <div class="rounded-full overflow-hidden shadow-lg">
-                <img src="https://nwestco.com/wp-content/uploads/2016/08/13.jpg" alt="Profile Picture" class="w-24 h-24 object-cover">
+        <div class="profile-header flex flex-col space-y-4 mb-8">
+            <div class="flex items-center space-x-6">
+                <div class="rounded-full overflow-hidden shadow-lg">
+                    <img src="https://nwestco.com/wp-content/uploads/2016/08/13.jpg" alt="Profile Picture" class="w-24 h-24 object-cover">
+                </div>
+                <div>
+                    <p class="text-2xl font-semibold" id="profile-name"></p>
+                    <button class="bg-accent text-black py-2 px-4 rounded-lg shadow-lg hover:bg-accent-light transition-colors duration-200" id="editProfileBtn">Edit Profile</button>
+                </div>
             </div>
-            <div>
-                <p class="text-2xl font-semibold" id="profile-name"></p>
-                <button class="bg-accent text-black py-2 px-4 rounded-lg shadow-lg hover:bg-accent-light transition-colors duration-200" id="editProfileBtn">Edit Profile</button>
+
+            <!-- Add Email, Address, and Phone Number in the profile header -->
+            <div class="profile-info text-lg space-y-2">
+                <p><strong>Email:</strong> <span id="profile-email">Loading...</span></p>
+                <p><strong>Address:</strong> <span id="profile-address">Loading...</span></p>
+                <p><strong>Phone:</strong> <span id="profile-phone">Loading...</span></p>
             </div>
         </div>
 
@@ -120,37 +127,6 @@ async function getProfile(userId) {
         console.error('Error fetching profile:', error);
     }
 }
-
-
-// Handle profile form submission (updating profile)
-document.getElementById("profile-form").addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const profileData = {
-        fullName: document.getElementById("fullName").value,
-        email: document.getElementById("email").value,
-        address: document.getElementById("address").value,
-        phoneNumber: document.getElementById("phoneNumber").value
-    };
-
-    try {
-        const response = await fetch(`https://localhost:7217/api/profile/${userId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(profileData)
-        });
-
-        if (response.ok) {
-            alert("Profile updated successfully!");
-        } else {
-            alert("Failed to update profile.");
-        }
-    } catch (error) {
-        console.error('Error updating profile:', error);
-    }
-});
 
 // Example usage
 getProfile(1); // Call with the actual userId
