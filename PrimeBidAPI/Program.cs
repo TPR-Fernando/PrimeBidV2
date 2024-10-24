@@ -34,6 +34,8 @@ builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IBidHistoryService, BidHistoryService>();
 builder.Services.AddScoped<IWatchlistService, WatchlistService>();
 
+
+
 // Inject the correct BraintreeService
 builder.Services.AddTransient<IBraintreeService, PrimeBidAPI.Services.BraintreeService>();
 
