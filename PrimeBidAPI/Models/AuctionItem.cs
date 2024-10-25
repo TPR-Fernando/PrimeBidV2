@@ -4,23 +4,26 @@ namespace PrimeBidAPI.Models
 {
     public class AuctionItem
     {
-        public int Id { get; set; }  // Primary Key
+        [Key]
+        public int Id { get; set; }
 
-        [Required(ErrorMessage = "Item name is required.")]
-        public string ItemName { get; set; }
+        [Required]
+        public string ProductName { get; set; }
 
-        [Required(ErrorMessage = "Category is required.")]
+        [Required]
         public string Category { get; set; }
 
-        [Required(ErrorMessage = "Description is required.")]
-        public string Description { get; set; }
+        [Required]
+        public string ItemDescription { get; set; }
 
-        [Range(0.01, double.MaxValue, ErrorMessage = "Starting price must be greater than zero.")]
-        public decimal StartingPrice { get; set; }
+        [Required]
+        public decimal StartingBid { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Auction length must be at least 1 day.")]
-        public int AuctionLength { get; set; }
+        [Required]
+        public int AuctionDuration { get; set; }  // Duration in days
 
         public string AdditionalTerms { get; set; }
+
+        public string ImagePath { get; set; }  // Path for the uploaded image
     }
 }
