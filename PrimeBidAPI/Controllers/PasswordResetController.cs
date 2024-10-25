@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrimeBidAPI.Data;
+using PrimeBidAPI.Models;
+using System.Security.Cryptography;
 
 namespace PrimeBidAPI.Controllers
 {
