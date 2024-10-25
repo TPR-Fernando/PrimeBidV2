@@ -35,14 +35,14 @@
 
             <div class="form-group">
                 <label for="starting-bid">Starting Bid</label>
-                <input type="text" id="starting-bid" placeholder="$100" required pattern="\d+(\.\d{1,2})?" title="Starting bid must be a valid number">
+                <input type="text" id="starting-bid" placeholder="$100"  title="Starting bid must be a valid number">
 
 
             </div>
 
             <div class="form-group">
                 <label for="auction-duration">Auction Duration</label>
-                <input type="text" id="auction-duration" placeholder="7 days" required pattern="\d+" title="Auction duration must be a number">
+                <input type="text" id="auction-duration" placeholder="7 days"  title="Auction duration must be a number">
             </div>
 
             <div class="form-group">
@@ -57,37 +57,41 @@
             </div>
         </form>
     </div>
-    <script>
-        document.querySelector('form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            const auctionItem = {
-                itemName: document.getElementById('product-name').value,
-                category: document.getElementById('category').value,
-                description: document.getElementById('item-description').value,
-                startingPrice: parseFloat(document.getElementById('starting-bid').value.replace('$', '')),
-                auctionLength: parseInt(document.getElementById('auction-duration').value),
-                additionalTerms: document.getElementById('additional-terms').value
-            };
-            
-            console.log('Submitting Auction Item:', auctionItem); // Log auction item
-            
-            const response = await fetch('http://localhost:5115/api/Auction', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(auctionItem)
-            });
-    
-            if (response.ok) {
-                alert('Auction item created successfully');
-            } else {
-                const errorData = await response.json(); // Capture error response
-                console.log('Error details:', errorData);
-                alert('Failed to create auction item: ' + (errorData.errors || response.statusText));
-            }
+   <script>
+    document.querySelector('.next-button').addEventListener('click', async (event) => {
+    event.preventDefault();
+
+    const auctionItem = {
+        productName: document.getElementById('product-name').value,
+        category: document.getElementById('category').value,
+        itemDescription: document.getElementById('item-description').value,
+        startingBid: parseFloat(document.getElementById('starting-bid').value.replace('$', '')),
+        auctionDuration: parseInt(document.getElementById('auction-duration').value),
+        additionalTerms: document.getElementById('additional-terms').value
+    };
+
+    try {
+        // Use the correct URL and include the server port if necessary (e.g., https://localhost:5001)
+        const response = await fetch('http://localhost:5115/api/AuctionItem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(auctionItem)
         });
-    </script>
+
+        if (response.ok) {
+            // Redirect to the next page on successful submission
+            window.location.href = 'Auctionpic.html';
+        } else {
+            const errorData = await response.json();
+            console.error("Error response:", errorData);
+            alert("There was an error submitting your auction item. Please try again.");
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        alert("Failed to submit the form. Ensure the server is running and CORS settings are configured.");
+    }
+});
+   </script>
+
 </body>
 </html>
