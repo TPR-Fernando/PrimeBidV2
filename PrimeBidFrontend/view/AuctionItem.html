@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill Details</title>
+    <link rel="stylesheet" href="css/AuctionItem.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <button class="back-button">&larr;</button>
+            <h1>Fill Details</h1>
+        </div>
+        <form>
+            <div class="form-group">
+                <label for="product-name">Product Name</label>
+                <input type="text" id="product-name" placeholder="iPhone 11">
+            </div>
+
+            <div class="form-group">
+                <label for="category">Select the category</label>
+                <select id="category">
+                    <option>Electronics</option>
+                    <option>Fashion</option>
+                    <option>Home Appliances</option>
+                    <option>Books</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="item-description">Item Description</label>
+                <textarea id="item-description" placeholder="Vintage 1950s leather jacket in excellent condition. Features classic design with brass zippers and comfortable fit"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="starting-bid">Starting Bid</label>
+                <input type="text" id="starting-bid" placeholder="$100" required pattern="\d+(\.\d{1,2})?" title="Starting bid must be a valid number">
+
+
+            </div>
+
+            <div class="form-group">
+                <label for="auction-duration">Auction Duration</label>
+                <input type="text" id="auction-duration" placeholder="7 days" required pattern="\d+" title="Auction duration must be a number">
+            </div>
+
+            <div class="form-group">
+                <label for="additional-terms">Additional Terms and Conditions</label>
+                <textarea id="additional-terms" placeholder="Enter any additional terms..."></textarea>
+            </div>
+                
+                
+            <div class="form-buttons">
+                <button type="button" class="cancel-button">Cancel</button>
+                <button type="submit" class="next-button">Next</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.querySelector('form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const auctionItem = {
+                itemName: document.getElementById('product-name').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('item-description').value,
+                startingPrice: parseFloat(document.getElementById('starting-bid').value.replace('$', '')),
+                auctionLength: parseInt(document.getElementById('auction-duration').value),
+                additionalTerms: document.getElementById('additional-terms').value
+            };
+            
+            console.log('Submitting Auction Item:', auctionItem); // Log auction item
+            
+            const response = await fetch('http://localhost:5115/api/Auction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(auctionItem)
+            });
+    
+            if (response.ok) {
+                alert('Auction item created successfully');
+            } else {
+                const errorData = await response.json(); // Capture error response
+                console.log('Error details:', errorData);
+                alert('Failed to create auction item: ' + (errorData.errors || response.statusText));
+            }
+        });
+    </script>
+</body>
+</html>
