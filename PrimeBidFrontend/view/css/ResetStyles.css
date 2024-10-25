@@ -1,0 +1,113 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #0E2033; 
+    font-family: 'Inter', sans-serif; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-container {
+    background-color: #2C3E50;
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-radius: 5%; 
+}
+
+.reset-form .form-group {
+    margin-bottom: 15px;
+    width: 80%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.reset-form .form-group label {
+    font-size: 13px;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 5px; 
+}
+
+
+.centered-image {
+    max-width: 30%;           
+    height: auto;             
+    margin-bottom: 20px;    
+}
+
+.Text {
+    text-align: center;         
+    margin-top: -3px;          
+    margin-bottom: 20px;       
+}
+
+.Text h2 {
+    font-size: 24px;           
+    color: #ffffff;            
+    margin: 0;                
+}
+
+.Text p {
+    font-size: 15px;           
+    color: #ffffff;               
+    margin: 0;
+    margin-top: 3px;                  
+}
+
+/*
+.reset-form .form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+*/
+input::placeholder {
+    font-size: 10px; 
+    color: rgba(247, 141, 167, 0.5);
+}
+
+.reset-form .input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.reset-form .input-container input {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px;
+    border: 1px solid #BDC3C7;
+    border-radius: 20px;
+    background-color: #ECF0F1;
+    box-sizing: border-box;
+    font-weight: 400; 
+}
+
+.reset-form .input-icon {
+    position: absolute;
+    right: 15px; 
+    top: 10px;
+    font-size: 16px; 
+    color: rgba(247, 141, 167, 0.5); 
+}
+
+.reset-form .btn {
+    width: 80%;
+    padding: 10px;
+    background-color:#C7FFD8;
+    color: #2C3E50; 
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 10px 0;
+    font-weight: bolder;
+    align-items: center;
+    gap: 10px; 
+    justify-content: center;
+    position: relative; 
+}

@@ -14,6 +14,8 @@ namespace PrimeBidAPI.Data
         public DbSet<BidHistory> BidHistories { get; set; }
         public DbSet<WatchlistModel> Watchlists { get; set; }
 
+        public DbSet<AuctionItem> AuctionItems { get; set; }
+
         // DbSets for PrimeBid context
         public DbSet<Item> Items { get; set; }
         public DbSet<PaymentModel> Payments { get; set; }

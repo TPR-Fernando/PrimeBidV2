@@ -1,0 +1,139 @@
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #0E2033;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .login-container {
+        background-color: #2C3E50;
+        width: 90%;
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        border-radius: 5%;
+    }
+
+    .login-container h2 {
+        margin-bottom: 20px;
+        color: #ECF0F1;
+    }
+
+    input::placeholder {
+        font-size: 10px; 
+        color: rgba(247, 141, 167, 0.5);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        width: 80%;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .input-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-container input {
+        width: 100%;
+        padding: 10px;
+        padding-right: 40px; 
+        border: 1px solid #BDC3C7;
+        border-radius: 8%; 
+        background-color: #ECF0F1;
+        box-sizing: border-box;
+        font-weight: 400;
+    }
+
+    .input-icon {
+        position: absolute;
+        right: 15px; 
+        top: 15px;
+        font-size: 16px; 
+        color: rgba(247, 141, 167, 0.5); 
+    }
+
+    .form-group label {
+        color: #ECF0F1;
+        font-size: 12px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background-color: #ECF0F1;
+        margin-top: 5px;
+        border-radius: 15px
+    }
+
+    .divider {
+        margin: 20px 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .divider hr {
+        flex: 1;
+        border: none;
+        border-top: 1px solid #ECF0F1;
+    }
+
+    .divider span {
+        margin: 0 10px;
+        color: #ECF0F1;
+        font-size: 12px;
+    }
+
+    #login-btn {
+        background-color: #C7FFD8; 
+        color: #2C3E50; 
+    }
+
+    .btn {
+        width: 80%;
+        padding: 10px;
+        background-color: #ECF0F1;
+        color: #2C3E50; 
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        margin: 10px 0;
+        font-weight: bolder;
+        align-items: center;
+        gap: 10px; 
+        justify-content: center;
+        position: relative;
+    }
+
+    .btn-icon {
+        width: 10px;
+        height: auto;
+    }
+
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: default;
+    }
+
+    .options {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+        color: #ECF0F1;
+        margin-top: 10px;
+    }
+
+    .options a {
+        color: #ECF0F1;
+        text-decoration: none;
+    }
