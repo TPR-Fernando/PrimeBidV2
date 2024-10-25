@@ -9,10 +9,10 @@
 <body>
     <div class="container">
         <div class="form-header">
-            <button class="back-button">&larr;</button>
+            <button class="back-button" onclick="goBack()">&larr;</button>
             <h1>Preview</h1>
         </div>
-        <form>
+        <form id="preview-form">
             <div class="form-group">
                 <label for="product-name">Product Name</label>
                 <input type="text" id="product-name" placeholder="">
@@ -20,7 +20,7 @@
 
             <div class="form-group">
                 <label for="category">Category</label>
-                <textarea id="item-description" placeholder=""></textarea>
+                <input type="text" id="category" placeholder="">
             </div>
 
             <div class="form-group">
@@ -30,14 +30,12 @@
 
             <div class="form-group">
                 <label for="starting-bid">Starting Bid</label>
-                <input type="text" id="starting-bid" placeholder="" required pattern="" title="">
-
-
+                <input type="text" id="starting-bid" placeholder="" required>
             </div>
 
             <div class="form-group">
                 <label for="auction-duration">Auction Duration</label>
-                <input type="text" id="auction-duration" placeholder=""  title="">
+                <input type="text" id="auction-duration" placeholder="">
             </div>
 
             <div class="form-group">
@@ -46,19 +44,54 @@
             </div>
             
             <div class="image-gallery">
-                <label for="additional-terms">Images</label>
-                <div class="image-thumbnail"><img  ></div>
-                <div class="image-thumbnail"></div>
-                <div class="image-thumbnail"></div>
+                <label for="images">Images</label>
+                <div class="image-thumbnail"><img id="image1" alt="Image 1" style="width: 100px; height: auto;"></div>
+                <div class="image-thumbnail"><img id="image2" alt="Image 2" style="width: 100px; height: auto;"></div>
+                <div class="image-thumbnail"><img id="image3" alt="Image 3" style="width: 100px; height: auto;"></div>
             </div>
                 
             <div class="form-buttons">
-                <button type="button" class="cancel-button">Cancel</button>
+                <button type="button" class="cancel-button" onclick="cancel()">Cancel</button>
                 <button type="submit" class="next-button">Post</button>
             </div>
-            
         </form>
     </div>
-  
+
+    <script>
+        async function fetchAuctionItem(itemId) {
+    try {
+        console.log(`Fetching auction item with ID: ${itemId}`);
+        const response = await fetch(`http://localhost:5115/api/AuctionItem/${itemId}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Fetched data:', data);
+
+        // Populate form fields
+        document.getElementById('product-name').value = data.productName;
+        document.getElementById('category').value = data.category;
+        document.getElementById('item-description').value = data.itemDescription;
+        document.getElementById('starting-bid').value = data.startingBid;
+        document.getElementById('auction-duration').value = data.auctionDuration;
+        document.getElementById('additional-terms').value = data.additionalTerms;
+
+        // Assuming images are a part of the response
+        const imagePaths = data.imagePath.split(','); // Adjust if necessary
+        document.getElementById('image1').src = imagePaths[0] || 'default-image-url.jpg';
+        document.getElementById('image2').src = imagePaths[1] || 'default-image-url.jpg';
+        document.getElementById('image3').src = imagePaths[2] || 'default-image-url.jpg';
+
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        alert('Failed to fetch auction item details. Please try again.');
+    }
+}
+
+// Call the function with the desired item ID
+fetchAuctionItem(8);
+    </script>
 </body>
 </html>
