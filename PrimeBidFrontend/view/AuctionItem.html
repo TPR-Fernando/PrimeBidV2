@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill Details</title>
+    <link rel="stylesheet" href="css/AuctionItem.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <button class="back-button">&larr;</button>
+            <h1>Fill Details</h1>
+        </div>
+        <form>
+            <div class="form-group">
+                <label for="product-name">Product Name</label>
+                <input type="text" id="product-name" placeholder="iPhone 11">
+            </div>
+
+            <div class="form-group">
+                <label for="category">Select the category</label>
+                <select id="category">
+                    <option>Electronics</option>
+                    <option>Fashion</option>
+                    <option>Home Appliances</option>
+                    <option>Books</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="item-description">Item Description</label>
+                <textarea id="item-description" placeholder="Vintage 1950s leather jacket in excellent condition. Features classic design with brass zippers and comfortable fit"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="starting-bid">Starting Bid</label>
+                <input type="text" id="starting-bid" placeholder="$100"  title="Starting bid must be a valid number">
+
+
+            </div>
+
+            <div class="form-group">
+                <label for="auction-duration">Auction Duration</label>
+                <input type="text" id="auction-duration" placeholder="7 days"  title="Auction duration must be a number">
+            </div>
+
+            <div class="form-group">
+                <label for="additional-terms">Additional Terms and Conditions</label>
+                <textarea id="additional-terms" placeholder="Enter any additional terms..."></textarea>
+            </div>
+                
+                
+            <div class="form-buttons">
+                <button type="button" class="cancel-button">Cancel</button>
+                <button type="submit" class="next-button">Next</button>
+            </div>
+        </form>
+    </div>
+   <script>
+    document.querySelector('.next-button').addEventListener('click', async (event) => {
+    event.preventDefault();
+
+    const auctionItem = {
+        productName: document.getElementById('product-name').value,
+        category: document.getElementById('category').value,
+        itemDescription: document.getElementById('item-description').value,
+        startingBid: parseFloat(document.getElementById('starting-bid').value.replace('$', '')),
+        auctionDuration: parseInt(document.getElementById('auction-duration').value),
+        additionalTerms: document.getElementById('additional-terms').value
+    };
+
+    try {
+        // Use the correct URL and include the server port if necessary (e.g., https://localhost:5001)
+        const response = await fetch('http://localhost:5115/api/AuctionItem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(auctionItem)
+        });
+
+        if (response.ok) {
+            // Redirect to the next page on successful submission
+            window.location.href = 'Auctionpic.html';
+        } else {
+            const errorData = await response.json();
+            console.error("Error response:", errorData);
+            alert("There was an error submitting your auction item. Please try again.");
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        alert("Failed to submit the form. Ensure the server is running and CORS settings are configured.");
+    }
+});
+   </script>
+
+</body>
+</html>
