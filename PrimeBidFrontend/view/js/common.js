@@ -1,0 +1,36 @@
+document.addEventListener("DOMContentLoaded", function () {
+    // Load the navbar HTML
+    fetch('navbar.html')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.text();
+        })
+        .then(data => {
+            // Create a container for the navbar and insert it at the top of the body
+            const bodyElement = document.querySelector('body');
+            const navbarWrapper = document.createElement('div');
+            navbarWrapper.innerHTML = data;
+            bodyElement.insertBefore(navbarWrapper, bodyElement.firstChild);
+
+            // Add the navbar.css after the navbar HTML is loaded
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'css/navbar.css';
+            document.head.appendChild(link);
+
+            // Set the active link based on the current URL
+            const navLinks = document.querySelectorAll('.nav-links a');
+            const currentPath = window.location.pathname.split('/').pop(); // Get just the filename
+            const activeLink = currentPath || 'index.html'; // If currentPath is empty, default to index.html
+
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href'); // Get the href attribute of the link
+                if (linkHref === activeLink) {
+                    link.classList.add('active'); // Add active class to the matching link
+                }
+            });
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+});

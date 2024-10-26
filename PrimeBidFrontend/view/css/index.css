@@ -1,0 +1,293 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 78.9%;
+    text-align: left;
+    margin-left: 80px;
+    margin-top: 20px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    width: 112%;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 0px solid rgba(255, 255, 255, 0.5);
+    font-size: 16px;
+    background-color: #212121;
+}
+
+.search-bar input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.search-bar input:hover {
+    border-color: rgba(255, 255, 255, 0.6); 
+}
+
+.search-bar input:focus {
+    border-color: rgba(255, 255, 255, 0.7); 
+    background-color: #1a1a1a; 
+    transition: all 0.3s ease;
+}
+
+.search-bar .search-icon {
+    width: 20px; 
+    height: auto;
+    margin-left: -40px;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+h2 {
+    color: white;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    justify-items: center;
+}
+
+.auction-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), #212121 50%, rgba(255, 255, 255, 0.1));
+    color: white;
+    width: 270px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.image-container img {
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.title-wishlist {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.card-title {
+    font-size: 16px;
+    margin: 0;
+}
+
+.wishlist-icon img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.price-row {
+    width: 100%;
+    margin: 0;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.bid-time-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+}
+
+.current-bid,
+.time-label {
+    font-size: 14px;
+    color: #c8c8c8;
+}
+
+.bid-time-values {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+}
+
+.next-bid {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0;
+}
+
+.remaining-time {
+    font-size: 16px;
+    color: #ff4d4d;
+    font-weight: bold;
+    margin: 0;
+}
+
+.categories-section {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 15px;
+    width: 110%;
+    margin: 50px 0;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.categories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.categories-header h2 {
+    font-size: 24px;
+    margin: 8px;
+
+}
+
+.see-all {
+    color: gold;
+    font-size: 14px;
+    text-decoration: underline;
+}
+
+.categories-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+
+.category-card {
+    background-color: black;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    width: 280px;
+}
+
+.category-image-container {
+    width: 170px;
+    height: 170px; /* Fixed height to ensure all images are the same size */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-self: center;
+    align-self: center;
+    overflow: hidden;
+    border-radius: 10px;
+    margin: 15px;
+    margin-left: 10px;
+}
+
+.category-image-container img {
+    width: 100%;  /* Ensures the image fits the container width */
+    height: auto; /* Keeps the aspect ratio of the image */
+    object-fit: cover; 
+}
+
+
+.category-card p {
+    color: white;
+    font-size: 22px;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.hero-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    margin-top: 40px;
+    border-radius: 10px;
+    width: 1435px;
+}
+
+.hero-text {
+    flex: 1;
+    padding-right: 40px;
+    color: white;
+}
+
+.hero-text h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    background: linear-gradient(to top, #FFD700, #727272); /* Gold gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-text p {
+    font-size: 22px;
+    color: #c8c8c8; /* Softer gray for readability */
+}
+
+.hero-image {
+    flex: 1;
+    text-align: center;
+}
+
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.button-container {
+    display: flex;
+    justify-content: left;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.start-bidding-button, .post-bid-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #252525; /* Dark neutral color */
+    color: #d1ae00; /* Darker gold text color */
+    transition: background-color 0.3s ease;
+}
+
+.start-bidding-button:hover, .post-bid-button:hover {
+    background-color: #333333; /* Slightly lighter on hover */
+}
+
