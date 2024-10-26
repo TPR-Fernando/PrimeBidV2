@@ -23,11 +23,11 @@ builder.Services.AddCors(options =>
 
 // Register the controllers for API
 builder.Services.AddControllers();
-
+builder.Services.AddLogging(); // Add logging services
 // Register your services (fixes the InvalidOperationException)
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<BidService>();
-builder.Services.AddScoped<AuctionService>();
+builder.Services.AddScoped<AuctionItemService>();
 builder.Services.AddScoped<WatchlistService>();
 
 builder.Services.AddScoped<IProfileService, ProfileService>();
