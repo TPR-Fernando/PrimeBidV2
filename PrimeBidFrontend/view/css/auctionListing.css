@@ -1,0 +1,183 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.auction-container {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 0px solid rgba(255, 255, 255, 0.5);
+    font-size: 16px;
+    background-color: #212121;
+}
+
+.search-bar input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.search-bar input:hover {
+    border-color: rgba(255, 255, 255, 0.6); 
+}
+
+.search-bar input:focus {
+    border-color: rgba(255, 255, 255, 0.7); 
+    background-color: #1a1a1a; 
+    transition: all 0.3s ease;
+}
+
+.search-bar .search-icon {
+    width: 20px; 
+    height: auto;
+    margin-left: -40px;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.auction-content {
+    display: flex;
+    gap: 20px;
+}
+
+/* Sidebar */
+.category-sidebar {
+    width: 20%;
+    padding: 20px;
+    color: #e2e2e2;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.category-list {
+    padding: 0; /* Remove default padding */
+}
+
+.category-list li {
+    list-style: none;
+    margin-bottom: 10px;
+    color: #c8c8c8;
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center align items */
+}
+
+.category-list input[type="checkbox"] {
+    margin-right: 10px; /* Space between checkbox and label */
+    width: 20px; /* Fixed width for consistent checkbox size */
+    height: 20px; /* Fixed height for consistent checkbox size */
+    accent-color: gold; /* Change the checkbox color to gold */
+}
+
+.category-list li:hover {
+    color: gold;
+}
+
+
+/* Items Grid */
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+.auction-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), #212121 50%, rgba(255, 255, 255, 0.1));
+    padding: 20px;
+    border-radius: 8px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-container {
+    width: 160px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.image-container img {
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.title-wishlist {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.card-title {
+    font-size: 16px;
+    margin: 10px 0;
+    margin-right: 10px;
+    color: #ffffff;
+}
+
+.price-row {
+    width: 100%;
+    margin: 0;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    color: c8c8c8;
+    margin: 2px;
+}
+
+.bid-time-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+}
+
+.current-bid,
+.time-label {
+    font-size: 14px;
+    color: #c8c8c8;
+}
+
+.bid-time-values {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+}
+
+.next-bid {
+    color: #ffffff;
+    font-weight: bold;
+    margin: 0;
+}
+
+.remaining-time {
+    color: #ff4d4d;
+    font-weight: bold;
+    margin: 0;
+}
