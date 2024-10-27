@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,21 +61,28 @@
 
 <script>
 // Fetch and display watchlist
-async function getWatchlist(userId) {
+async function getWatchlist(UserId) {
     try {
-        const response = await fetch(`/api/watchlist/${userId}`);
+        const response = await fetch(`https://localhost:7217/api/profile/${UserId}/watchlist`);
+        
+        if (!response.ok) {
+            const errorText = await response.text(); // Get response text for debugging
+            throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
+        }
+        
         const watchlist = await response.json();
 
         const watchlistElement = document.getElementById("watchlist");
         watchlistElement.innerHTML = ""; // Clear any existing watchlist items
 
-        if (watchlist.length > 0) {
+        if (watchlist && watchlist.length > 0) {
             watchlist.forEach(item => {
                 const watchlistItem = `
                     <div class="bg-transparent border border-gray-300 rounded-lg p-4 shadow-lg text-textWhite">
                         <p><strong>Item:</strong> ${item.itemName}</p>
-                        <p><strong>Current Bid:</strong> $${item.currentBid}</p>
-                        <p><strong>Auction End Date:</strong> ${new Date(item.auctionEndDate).toLocaleDateString()}</p>
+                        <p><strong>Current Price:</strong> $${item.currentPrice}</p>
+                        <p><strong>Auction End Date:</strong> ${new Date(item.endDate).toLocaleDateString()}</p>
+                        <img src="${item.itemImage}" alt="${item.itemName}" class="w-full h-32 object-cover rounded-md mb-2">
                     </div>`;
                 watchlistElement.innerHTML += watchlistItem;
             });
@@ -84,12 +90,25 @@ async function getWatchlist(userId) {
             watchlistElement.innerHTML = `<p>Your watchlist is empty</p>`;
         }
     } catch (error) {
-        console.error('Error fetching watchlist:', error);
+        console.error('Error fetching watchlist:', error.message); // Log the error message
+        document.getElementById("watchlist").innerHTML = `<p>Error fetching watchlist: ${error.message}. Please try again later.</p>`;
     }
 }
 
-// Example usage
-getWatchlist(1); // Call with the actual userId
+
+
+// Function to handle logout
+function handleLogout() {
+    // Redirect to the login page
+    window.location.href = "LoginPage.html";
+}
+
+// Attach the event listener to the logout button
+document.querySelector("button.bg-red-600").addEventListener("click", handleLogout);
+
+// Call the function with the appropriate user ID
+const UserId = 2; 
+getWatchlist(UserId);
 </script>
 
 </body>

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PrimeBidAPI.Models;
 using PrimeBidAPI.Services;
+using System.Collections.Generic; // Make sure to include this for List<>
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 

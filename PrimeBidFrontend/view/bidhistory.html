@@ -63,12 +63,14 @@
 // Fetch and display bid history
 async function getBidHistory(userId) {
     try {
-        // Fetch bid history data from your back-end API
-        const response = await fetch(`https://localhost:7217/api/bidHistory/${userId}`); // Replace with actual API endpoint
+        const response = await fetch(`https://localhost:7217/api/profile/${userId}/bid-history`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const bidHistory = await response.json();
 
         const bidListElement = document.getElementById("bid-list");
-        bidListElement.innerHTML = ""; // Clear any existing bids
+        bidListElement.innerHTML = "";
 
         if (bidHistory.length > 0) {
             bidHistory.forEach(bid => {
@@ -76,7 +78,6 @@ async function getBidHistory(userId) {
                     <div class="bg-transparent border border-gray-300 rounded-lg p-4 shadow-lg text-textWhite">
                         <p><strong>Item:</strong> ${bid.itemName}</p>
                         <p><strong>Bid Amount:</strong> $${bid.bidAmount}</p>
-                        <p><strong>Status:</strong> ${bid.status}</p>
                         <p><strong>Date:</strong> ${new Date(bid.bidDate).toLocaleDateString()}</p>
                     </div>`;
                 bidListElement.innerHTML += bidItem;
@@ -86,13 +87,22 @@ async function getBidHistory(userId) {
         }
     } catch (error) {
         console.error('Error fetching bid history:', error);
-        const bidListElement = document.getElementById("bid-list");
         bidListElement.innerHTML = `<p>Error loading bid history. Please try again later.</p>`;
     }
 }
 
+// Function to handle logout
+function handleLogout() {
+    // Redirect to the login page
+    window.location.href = "LoginPage.html";
+}
+
+// Attach the event listener to the logout button
+document.querySelector("button.bg-red-600").addEventListener("click", handleLogout);
+
 // Fetch bid history on page load
-getBidHistory(1);  // Pass the actual userId dynamically if needed
+getBidHistory(5); // Pass the actual userId dynamically if needed
+
 </script>
 
 </body>
