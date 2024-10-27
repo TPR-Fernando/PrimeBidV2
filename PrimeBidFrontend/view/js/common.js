@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", function () {
             bodyElement.insertBefore(navbarWrapper, bodyElement.firstChild);
 
             // Add the navbar.css after the navbar HTML is loaded
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = 'css/navbar.css';
-            document.head.appendChild(link);
+            const navbarLink = document.createElement('link');
+            navbarLink.rel = 'stylesheet';
+            navbarLink.href = 'css/navbar.css';
+            document.head.appendChild(navbarLink);
 
             // Set the active link based on the current URL
             const navLinks = document.querySelectorAll('.nav-links a');
@@ -33,4 +33,27 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         })
         .catch(error => console.error('Error loading navbar:', error));
+
+    // Load the footer HTML
+    fetch('Footer.html')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.text();
+        })
+        .then(data => {
+            // Create a container for the footer and insert it at the bottom of the body
+            const bodyElement = document.querySelector('body');
+            const footerWrapper = document.createElement('div');
+            footerWrapper.innerHTML = data;
+            bodyElement.appendChild(footerWrapper);
+
+            // Add the Footer.css after the footer HTML is loaded
+            const footerLink = document.createElement('link');
+            footerLink.rel = 'stylesheet';
+            footerLink.href = 'css/Footer.css';
+            document.head.appendChild(footerLink);
+        })
+        .catch(error => console.error('Error loading footer:', error));
 });
