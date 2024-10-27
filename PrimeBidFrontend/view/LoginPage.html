@@ -37,7 +37,6 @@
     </div>
 
     <!--JS-->
-
     <script>
         document.getElementById("togglePassword").addEventListener("click", function() {
             const passwordInput = document.getElementById("password");
@@ -59,7 +58,7 @@
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
-            fetch('https://your-api-url.com/api/UserLogin/login', {  //LINK TO THE API!!!!
+            fetch('https://localhost:7217/api/UserLogin/login', {  //LINK TO THE API!!!!
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -87,7 +86,6 @@
                 alert('Login failed: ' + error.message); 
             });
         });
-
     </script>
 </body>
 </html>
