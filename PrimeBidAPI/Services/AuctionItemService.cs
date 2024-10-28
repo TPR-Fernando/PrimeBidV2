@@ -1,4 +1,5 @@
-﻿using PrimeBidAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PrimeBidAPI.Data;
 using PrimeBidAPI.Models;
 
 namespace PrimeBidAPI.Services
@@ -14,6 +15,8 @@ namespace PrimeBidAPI.Services
 
         public async Task<AuctionItem> AddAuctionItem(AuctionItem item)
         {
+
+
             _context.AuctionItems.Add(item);
             await _context.SaveChangesAsync();
             return item;
