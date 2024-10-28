@@ -9,14 +9,9 @@
 <body>
     <div class="auction-container">
         <div class="back-link">
-            <a href="#">← Back to Search</a>
+            <a href="index.html">← Back to Search</a>
         </div>
         <div class="auction-content">
-            <div class="thumbnail-images">
-                <img id="thumbnail-1" src="" alt="Thumbnail 1"> <br>
-                <img id="thumbnail-2" src="" alt="Thumbnail 2"> <br>
-                <img id="thumbnail-3" src="" alt="Thumbnail 3">
-            </div>
             <div class="image-gallery">
                 <div class="main-image">
                     <img id="main-image" src="" alt="Main Image">
@@ -46,44 +41,55 @@
         </div>
     </div>
 
-    <!-- Fetch Product Data via JavaScript -->
     <script>
         // Function to fetch product details from your back-end API
-        async function fetchProductDetails(productId) {
+        async function fetchProductDetails() {
+            // Extract the product ID from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+    
+            if (!productId) {
+                console.error("No product ID found in URL.");
+                return;
+            }
+    
             try {
                 // Use the correct API endpoint and pass the productId parameter
-                const response = await fetch(`https://localhost:7217/products/${productId}`); // Replace with the actual endpoint
+                const response = await fetch(`https://localhost:7217/api/Details/products/${productId}`);
+    
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch product details: ${response.statusText}`);
+                }
+    
                 const product = await response.json();
-
+    
                 // Dynamically update the HTML content with product details
                 document.getElementById('item-name').innerText = product.itemName;
-                //document.getElementById('currentBid').innerText = `$${product.estimatedBid} USD`;
-                //document.getElementById('totalBids').innerText = `${product.bidHistories.length} bids`;
+                document.getElementById('currentBid').innerText = `$${product.bidAmount || '0'} USD`;
                 document.getElementById('estimatedBid').innerText = `$${product.estimatedBid} USD`;
                 document.getElementById('item-description').innerText = product.itemDescription;
                 document.getElementById('end-date').innerText = new Date(product.endDate).toLocaleString();
-
+    
                 // Set image sources dynamically (if available)
-                //document.getElementById('main-image').src = `/images/${product.itemImage}`;
-                //document.getElementById('thumbnail-1').src = `/images/${product.itemImage}`;
-                //document.getElementById('thumbnail-2').src = `/images/${product.itemImage}`;
-                //document.getElementById('thumbnail-3').src = `/images/${product.itemImage}`;
-
-                // Optional: dynamically add bid options
-                //const bidSelect = document.getElementById('max-bid');
-                //[100, 200, 300, 400].foreach(amount => {
-                //   const option = document.createelement('option');
-                //    option.text = `$${amount} usd`;
-                //    bidselect.add(option);
-                //});
+                const mainImageSrc = product.itemImage ? product.itemImage : 'Resources/placeholder.jpg';
+                document.getElementById('main-image').src = mainImageSrc;
+    
+                // Dynamically add bid options to the select element
+                const bidSelect = document.getElementById('max-bid');
+                [100, 200, 300, 400].forEach(amount => {
+                    const option = document.createElement('option');
+                    option.value = amount;
+                    option.text = `$${amount} USD`;
+                    bidSelect.add(option);
+                });
             } catch (error) {
                 console.error('Error fetching product details:', error);
             }
         }
-
-        // Fetch product details on page load (replace with the actual product ID if needed)
-        fetchProductDetails(1);  // Hardcoded product ID; change dynamically as needed
+    
+        // Fetch product details on page load
+        window.addEventListener("DOMContentLoaded", fetchProductDetails);
     </script>
-
+    
 </body>
 </html>

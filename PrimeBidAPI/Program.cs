@@ -34,6 +34,14 @@ builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IBidHistoryService, BidHistoryService>();
 builder.Services.AddScoped<IWatchlistService, WatchlistService>();
 
+//Session
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout as needed
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 
 // Inject the correct BraintreeService
@@ -69,6 +77,11 @@ app.UseHttpsRedirection();
 
 // Enable CORS for cross-origin requests
 app.UseCors("AllowAll");
+
+app.UseStaticFiles();
+app.UseRouting();
+
+app.UseSession(); // Use session middleware here
 
 // Enable Authorization middleware
 app.UseAuthorization();

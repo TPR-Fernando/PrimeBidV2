@@ -29,14 +29,14 @@
                 <div id="error-message" class="error-bubble"></div>
             </div>
             <!--
-            <div class="form-group">
-                <label for="address" style="font-size: 13px; color: #ffffff;">Address</label>
-                <div class="input-container">
-                    <input type="text" id="address" placeholder="home address">
-                    <i class="fas fa-envelope input-icon"></i>
+                <div class="form-group">
+                    <label for="address" style="font-size: 13px; color: #ffffff;">Address</label>
+                    <div class="input-container">
+                        <input type="text" id="address" placeholder="home address">
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
                 </div>
-            </div>
-        -->
+            -->
 
             <div class="form-group">
                 <label for="password" style="font-size: 13px; color: #ffffff;">Password:</label>
@@ -64,7 +64,7 @@
     </div>
 
     <script>
-        document.getElementById('register-form').addEventListener('submit', function(event) {
+        document.getElementById('register-form').addEventListener('submit', function (event) {
             event.preventDefault();
 
             const password = document.getElementById('password').value;
@@ -80,38 +80,38 @@
                     FullName: document.getElementById('username').value,
                     Email: document.getElementById('email').value,
                     Password: password
-            };
+                };
 
-            // Send data to the backend using POST
+                // Send data to the backend using POST
                 fetch('https://localhost:7217/api/UserRegistration/register', { //API LINK HERE
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json(); 
-                } else {
-                    return response.text().then(errorMessage => {
-                        throw new Error(errorMessage); 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            return response.text().then(errorMessage => {
+                                throw new Error(errorMessage);
+                            });
+                        }
+                    })
+                    .then(data => {
+                        alert('Registration successful!');
+                        window.location.href = 'index.html';
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Registration failed: ' + error.message);
                     });
-                }
-            })
-            .then(data => {
-                alert('Registration successful!');
-                window.location.href = 'Home.html'; 
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Registration failed: ' + error.message);  
-            });
-        }
+            }
 
         });
 
-        document.getElementById("email").addEventListener("input", function() {
+        document.getElementById("email").addEventListener("input", function () {
             const emailInput = this.value;
             const errorMessage = document.getElementById("error-message");
 
@@ -120,21 +120,21 @@
             if (emailPattern.test(emailInput)) {
                 errorMessage.style.display = "none";
             } else {
-                errorMessage.style.display = "block"; 
+                errorMessage.style.display = "block";
                 errorMessage.textContent = "Please enter a valid email address.";
             }
         });
 
-        document.getElementById("togglePassword").addEventListener("click", function() {
+        document.getElementById("togglePassword").addEventListener("click", function () {
             const passwordInput = document.getElementById("password");
 
             if (passwordInput.type === "password") {
-                passwordInput.type = "text"; 
-                this.classList.remove("fa-eye"); 
-                this.classList.add("fa-eye-slash"); 
+                passwordInput.type = "text";
+                this.classList.remove("fa-eye");
+                this.classList.add("fa-eye-slash");
             } else {
                 passwordInput.type = "password";
-                this.classList.remove("fa-eye-slash"); 
+                this.classList.remove("fa-eye-slash");
                 this.classList.add("fa-eye");
             }
         });

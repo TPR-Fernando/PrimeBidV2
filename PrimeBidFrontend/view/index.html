@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="css/index.css">
     <script src="js/common.js" defer></script>
+    <script src="js/index.js" defer></script> <!-- Add this line -->
 </head>
-
 <body>
     <div class="container">
+        <!-- Search Bar -->
         <div class="search-bar">
             <input type="text" placeholder="Search Auctions">
             <img src="Resources/searchIcon.svg" alt="Search Icon" class="search-icon">
@@ -21,239 +21,60 @@
                 <h1>Bid on Unique Treasures</h1>
                 <p>Discover rare collectibles, antiques, and more in our exclusive auctions. Start bidding and find something special today!</p>
                 <div class="button-container">
-                    <button class="start-bidding-button">Start Bidding</button>
-                    <button class="post-bid-button">+Post Bid</button>
-                </div>
+                    <a href="auctionListing.html">
+                      <button class="start-bidding-button">Start Bidding</button>
+                    </a>
+                    <a href="AuctionItem.html">
+                      <button class="post-bid-button">Post Bid</button>
+                    </a>
+                  </div>
             </div>
             <div class="hero-image">
                 <img src="Resources/hammer.png" alt="Gavel Image">
             </div>
-        </div>        
-
-        <h2>Soon to End Auctions</h2>
-
-        <div class="card-grid">
-            <!-- Repeat Auction Card 4 times -->
-            <div class="auction-card">
-                <div class="image-container">
-                    <img src="Resources/artwork.jpg" alt="Antique Golden Artwork of 1922">
-                </div>
-                <div class="title-wishlist">
-                    <p class="card-title">Antique Golden Artwork of 1922</p>
-                    <div class="wishlist-icon">
-                        <img src="Resources/wishlistIcon.svg" alt="Wishlist">
-                    </div>
-                </div>
-                <div class="price-row">
-                    <p class="price">$2200</p>
-                </div>
-                <div class="bid-time-row">
-                    <p class="current-bid">Current Bid:</p>
-                    <p class="time-label">Remaining Time:</p>
-                </div>
-                <div class="bid-time-values">
-                    <p class="next-bid">$2300</p>
-                    <p class="remaining-time">30m 20s</p>
-                </div>
-            </div>
-
-            <!-- Repeat three more cards -->
-            <div class="auction-card">
-                <div class="image-container">
-                    <img src="Resources/artwork.jpg" alt="Antique Golden Artwork of 1922">
-                </div>
-                <div class="title-wishlist">
-                    <p class="card-title">Antique Golden Artwork of 1922</p>
-                    <div class="wishlist-icon">
-                        <img src="Resources/wishlistIcon.svg" alt="Wishlist">
-                    </div>
-                </div>
-                <div class="price-row">
-                    <p class="price">$2200</p>
-                </div>
-                <div class="bid-time-row">
-                    <p class="current-bid">Current Bid:</p>
-                    <p class="time-label">Remaining Time:</p>
-                </div>
-                <div class="bid-time-values">
-                    <p class="next-bid">$2300</p>
-                    <p class="remaining-time">30m 20s</p>
-                </div>
-            </div>
-
-            <div class="auction-card">
-                <div class="image-container">
-                    <img src="Resources/artwork.jpg" alt="Antique Golden Artwork of 1922">
-                </div>
-                <div class="title-wishlist">
-                    <p class="card-title">Antique Golden Artwork of 1922</p>
-                    <div class="wishlist-icon">
-                        <img src="Resources/wishlistIcon.svg" alt="Wishlist">
-                    </div>
-                </div>
-                <div class="price-row">
-                    <p class="price">$2200</p>
-                </div>
-                <div class="bid-time-row">
-                    <p class="current-bid">Current Bid:</p>
-                    <p class="time-label">Remaining Time:</p>
-                </div>
-                <div class="bid-time-values">
-                    <p class="next-bid">$2300</p>
-                    <p class="remaining-time">30m 20s</p>
-                </div>
-            </div>
-
-            <div class="auction-card">
-                <div class="image-container">
-                    <img src="Resources/artwork.jpg" alt="Antique Golden Artwork of 1922">
-                </div>
-                <div class="title-wishlist">
-                    <p class="card-title">Antique Golden Artwork of 1922</p>
-                    <div class="wishlist-icon">
-                        <img src="Resources/wishlistIcon.svg" alt="Wishlist">
-                    </div>
-                </div>
-                <div class="price-row">
-                    <p class="price">$2200</p>
-                </div>
-                <div class="bid-time-row">
-                    <p class="current-bid">Current Bid:</p>
-                    <p class="time-label">Remaining Time:</p>
-                </div>
-                <div class="bid-time-values">
-                    <p class="next-bid">$2300</p>
-                    <p class="remaining-time">30m 20s</p>
-                </div>
-            </div>
         </div>
+
+        <!-- Section for Soon to End Auctions -->
+        <h2>Soon to End Auctions</h2>
+        <div class="card-grid" id="soonToEndAuctions"></div>
 
         <div class="categories-section">
             <div class="categories-header">
                 <h2>Categories</h2>
-                <a href="#" class="see-all">See all</a>
+                <a href="auctionListing.html" class="see-all">See all</a>
             </div>
             <div class="categories-container">
                 <div class="category-card">
                     <div class="category-image-container">
-                        <img src="Resources/antiques.png" alt="Antiques">
+                        <a href="auctionListing.html?category=antiques">
+                            <img src="Resources/antiques.png" alt="Antiques">
+                        </a>
                     </div>
                     <p>Antiques</p>
                 </div>
                 <div class="category-card">
                     <div class="category-image-container">
-                        <img src="Resources/artwork.png" alt="Artwork">
+                        <a href="auctionListing.html?category=art">
+                            <img src="Resources/artwork.png" alt="Artwork">
+                        </a>
                     </div>
                     <p>Artwork</p>
                 </div>
                 <div class="category-card">
                     <div class="category-image-container">
-                        <img src="Resources/clothing.png" alt="Clothing">
+                        <a href="auctionListing.html?category=clothing">
+                            <img src="Resources/clothing.png" alt="Clothing">
+                        </a>
                     </div>
                     <p>Clothing</p>
                 </div>
             </div>
         </div>
-
-        <h2>Popular Auctions</h2>
-
-        <div class="card-grid">
-            <!-- Repeat Auction Card 4 times -->
-            <div class="auction-card">
-                <div class="image-container">
-                    <img src="Resources/artwork.jpg" alt="Antique Golden Artwork of 1922">
-                </div>
-                <div class="title-wishlist">
-                    <p class="card-title">Antique Golden Artwork of 1922</p>
-                    <div class="wishlist-icon">
-                        <img src="Resources/wishlistIcon.svg" alt="Wishlist">
-                    </div>
-                </div>
-                <div class="price-row">
-                    <p class="price">$2200</p>
-                </div>
-                <div class="bid-time-row">
-                    <p class="current-bid">Current Bid:</p>
-                    <p class="time-label">Remaining Time:</p>
-                </div>
-                <div class="bid-time-values">
-                    <p class="next-bid">$2300</p>
-                    <p class="remaining-time">30m 20s</p>
-                </div>
-            </div>
-
-            <!-- Repeat three more cards -->
-            <div class="auction-card">
-                <div class="image-container">
-                    <img src="Resources/artwork.jpg" alt="Antique Golden Artwork of 1922">
-                </div>
-                <div class="title-wishlist">
-                    <p class="card-title">Antique Golden Artwork of 1922</p>
-                    <div class="wishlist-icon">
-                        <img src="Resources/wishlistIcon.svg" alt="Wishlist">
-                    </div>
-                </div>
-                <div class="price-row">
-                    <p class="price">$2200</p>
-                </div>
-                <div class="bid-time-row">
-                    <p class="current-bid">Current Bid:</p>
-                    <p class="time-label">Remaining Time:</p>
-                </div>
-                <div class="bid-time-values">
-                    <p class="next-bid">$2300</p>
-                    <p class="remaining-time">30m 20s</p>
-                </div>
-            </div>
-
-            <div class="auction-card">
-                <div class="image-container">
-                    <img src="Resources/artwork.jpg" alt="Antique Golden Artwork of 1922">
-                </div>
-                <div class="title-wishlist">
-                    <p class="card-title">Antique Golden Artwork of 1922</p>
-                    <div class="wishlist-icon">
-                        <img src="Resources/wishlistIcon.svg" alt="Wishlist">
-                    </div>
-                </div>
-                <div class="price-row">
-                    <p class="price">$2200</p>
-                </div>
-                <div class="bid-time-row">
-                    <p class="current-bid">Current Bid:</p>
-                    <p class="time-label">Remaining Time:</p>
-                </div>
-                <div class="bid-time-values">
-                    <p class="next-bid">$2300</p>
-                    <p class="remaining-time">30m 20s</p>
-                </div>
-            </div>
-
-            <div class="auction-card">
-                <div class="image-container">
-                    <img src="Resources/artwork.jpg" alt="Antique Golden Artwork of 1922">
-                </div>
-                <div class="title-wishlist">
-                    <p class="card-title">Antique Golden Artwork of 1922</p>
-                    <div class="wishlist-icon">
-                        <img src="Resources/wishlistIcon.svg" alt="Wishlist">
-                    </div>
-                </div>
-                <div class="price-row">
-                    <p class="price">$2200</p>
-                </div>
-                <div class="bid-time-row">
-                    <p class="current-bid">Current Bid:</p>
-                    <p class="time-label">Remaining Time:</p>
-                </div>
-                <div class="bid-time-values">
-                    <p class="next-bid">$2300</p>
-                    <p class="remaining-time">30m 20s</p>
-                </div>
-            </div>
-        </div>
         
+
+        <!-- Section for Popular Auctions -->
+        <h2>Popular Auctions</h2>
+        <div class="card-grid" id="popularAuctions"></div>
     </div>
 </body>
-
 </html>

@@ -22,7 +22,7 @@ namespace PrimeBidAPI.Controllers
             // Find the user by email
             var user = _context.Profiles.FirstOrDefault(u => u.Email == model.Email);
             if (user == null)
-                return BadRequest("User not found.");
+                return BadRequest(new { error = "User Not Found." });
 
             // Hash the new password and update it
             var newPasswordHash = HashPassword(model.NewPassword, user.Salt);
@@ -30,7 +30,7 @@ namespace PrimeBidAPI.Controllers
 
             _context.SaveChanges();
 
-            return Ok("Password reset successful.");
+            return Ok(new { message = "Password reset successful." });
         }
 
         private string HashPassword(string password, string salt)

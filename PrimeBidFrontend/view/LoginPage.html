@@ -11,7 +11,7 @@
 <body>
     <div class="login-container">
         <h2>LogIn</h2>
-        <form>
+        <form id="login-form">
             <div class="form-group">
                 <label for="email" style="font-size: 13px; color: #ffffff;">Email Address:</label>
                 <div class="input-container">
@@ -38,27 +38,27 @@
 
     <!--JS-->
     <script>
-        document.getElementById("togglePassword").addEventListener("click", function() {
+        document.getElementById("togglePassword").addEventListener("click", function () {
             const passwordInput = document.getElementById("password");
 
             if (passwordInput.type === "password") {
-                passwordInput.type = "text"; 
-                this.classList.remove("fa-eye"); 
-                this.classList.add("fa-eye-slash"); 
+                passwordInput.type = "text";
+                this.classList.remove("fa-eye");
+                this.classList.add("fa-eye-slash");
             } else {
                 passwordInput.type = "password";
-                this.classList.remove("fa-eye-slash"); 
+                this.classList.remove("fa-eye-slash");
                 this.classList.add("fa-eye");
             }
         });
 
-        document.getElementById("login-form").addEventListener("submit", function(event) {
+        document.getElementById("login-form").addEventListener("submit", function (event) {
             event.preventDefault();
 
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
-            fetch('https://localhost:7217/api/UserLogin/login', {  //LINK TO THE API!!!!
+            fetch('https://localhost:7217/api/UserLogin/login', { //LINK TO THE API!!!
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -68,24 +68,21 @@
                     Password: password
                 })
             })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    return response.text().then(errorMessage => {
-                        throw new Error(errorMessage); 
-                    });
-                }
-            })
-            .then(data => {
-                alert('Login successful!');
-                window.location.href = 'HomePage.html';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Login failed: ' + error.message); 
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === "Login successful") {
+                        alert('Login successful!');
+                        window.location.href = 'index.html';
+                    } else {
+                        alert('Login failed: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Login failed: ' + error.message);
+                });
         });
+
     </script>
 </body>
 </html>
