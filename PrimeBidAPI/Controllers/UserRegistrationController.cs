@@ -22,7 +22,7 @@ namespace PrimeBidAPI.Controllers
             // Check if email already exists
             var existingUser = _context.Profiles.FirstOrDefault(u => u.Email == model.Email);
             if (existingUser != null)
-                return BadRequest("Email already registered.");
+                return BadRequest(new { error = "Email already registered." });
 
             // Generate a salt and hash the password
             var salt = GenerateSalt();
@@ -41,7 +41,7 @@ namespace PrimeBidAPI.Controllers
             _context.Profiles.Add(newUser);
             _context.SaveChanges();
 
-            return Ok("Registration successful.");
+            return Ok(new { message = "Registration successful." });
         }
 
         private string GenerateSalt()

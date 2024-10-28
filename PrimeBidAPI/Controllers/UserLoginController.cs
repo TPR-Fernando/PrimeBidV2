@@ -22,12 +22,12 @@ namespace PrimeBidAPI.Controllers
             // Find user by email
             var user = _context.Profiles.FirstOrDefault(u => u.Email == model.Email);
             if (user == null)
-                return Unauthorized("User not found.");
+                return Unauthorized(new { error = "User Not Found." });
 
             // Verify password
             var passwordHash = HashPassword(model.Password, user.Salt);
             if (user.PasswordHash != passwordHash)
-                return Unauthorized("Invalid password.");
+                return Unauthorized(new { error = "Invalid Passsword." });
 
             // Create a session
             HttpContext.Session.SetString("UserEmail", user.Email);
