@@ -48,7 +48,7 @@
             // Extract the product ID from the URL
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
-            
+
             if (!productId) {
                 console.error("No product ID found in URL.");
                 return;
@@ -56,23 +56,23 @@
 
             try {
                 // Use the correct API endpoint and pass the productId parameter
-                const response = await fetch(`https://localhost:7217/api/Details/products/${productId}`);
-                
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch product details: ${response.statusText}`);
+                const response = await fetch(https://localhost:7217/api/Details/products/${productId});
+
+                    if (!response.ok) {
+                    throw new Error(Failed to fetch product details: ${ response.statusText });
                 }
 
                 const product = await response.json();
 
                 // Dynamically update the HTML content with product details
                 document.getElementById('item-name').innerText = product.itemName;
-                document.getElementById('currentBid').innerText = `$${product.bidAmount || '0'} USD`;
-                document.getElementById('estimatedBid').innerText = `$${product.estimatedBid} USD`;
+                document.getElementById('currentBid').innerText = $${ product.bidAmount || '0' } USD;
+                document.getElementById('estimatedBid').innerText = $${ product.estimatedBid } USD;
                 document.getElementById('item-description').innerText = product.itemDescription;
                 document.getElementById('end-date').innerText = new Date(product.endDate).toLocaleString();
 
                 // Set image sources dynamically (if available)
-                const mainImageSrc = product.itemImage ? `Resources/${product.itemImage}` : 'Resources/placeholder.jpg';
+                const mainImageSrc = product.itemImage ? product.itemImage : 'Resources/placeholder.jpg';
                 document.getElementById('main-image').src = mainImageSrc;
 
                 // Dynamically add bid options to the select element
@@ -80,7 +80,7 @@
                 [100, 200, 300, 400].forEach(amount => {
                     const option = document.createElement('option');
                     option.value = amount;
-                    option.text = `$${amount} USD`;
+                    option.text = $${ amount } USD;
                     bidSelect.add(option);
                 });
             } catch (error) {

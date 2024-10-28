@@ -1,5 +1,4 @@
-﻿// ProductService.cs
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using PrimeBidAPI.Data;
 using PrimeBidAPI.Models;
@@ -84,6 +83,52 @@ namespace PrimeBidAPI.Services
             }
 
             return products;
+        }
+
+        public async Task<List<ItemDto>> GetSoonToEndAuctionsAsync()
+        {
+            _logger.LogInformation("Fetching soon-to-end auctions.");
+
+            var soonToEndAuctions = await _context.Items
+                .OrderBy(i => i.EndDate) // Sort by EndDate to get soonest ending items
+                .Take(4) // Limit to the first 4 items
+                .Select(i => new ItemDto
+                {
+                    Id = i.Id,
+                    ItemName = i.ItemName,
+                    ItemImage = i.ItemImage,
+                    EstimatedBid = i.EstimatedBid,
+                    ItemDescription = i.ItemDescription,
+                    Category = i.Category,
+                    EndDate = i.EndDate,
+                    BidAmount = i.BidHistories.FirstOrDefault() != null ? i.BidHistories.FirstOrDefault().BidAmount : 0
+                })
+                .ToListAsync();
+
+            return soonToEndAuctions;
+        }
+
+        public async Task<List<ItemDto>> GetPopularAuctionsAsync()
+        {
+            _logger.LogInformation("Fetching popular auctions.");
+
+            var popularAuctions = await _context.Items
+                .OrderByDescending(i => i.BidHistories.Count) // Sort by bid count to get popular items
+                .Take(4) // Limit to the first 4 items
+                .Select(i => new ItemDto
+                {
+                    Id = i.Id,
+                    ItemName = i.ItemName,
+                    ItemImage = i.ItemImage,
+                    EstimatedBid = i.EstimatedBid,
+                    ItemDescription = i.ItemDescription,
+                    Category = i.Category,
+                    EndDate = i.EndDate,
+                    BidAmount = i.BidHistories.FirstOrDefault() != null ? i.BidHistories.FirstOrDefault().BidAmount : 0
+                })
+                .ToListAsync();
+
+            return popularAuctions;
         }
 
 
