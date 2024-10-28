@@ -37,6 +37,19 @@ namespace PrimeBidAPI.Controllers
             _logger.LogInformation("Product with ID: {ProductId} successfully fetched.", id);
             return Ok(product);
         }
+        // GET: api/Product
+        [HttpGet("products")]
+        public async Task<ActionResult<List<ItemDto>>> GetAllProducts()
+        {
+            var products = await _productService.GetAllProductsAsync();
+
+            if (products == null || products.Count == 0)
+            {
+                return NotFound(); // 404 if no products
+            }
+
+            return Ok(products); // 200 with product list
+        }
 
         // Endpoint to remove an item from the watchlist
         [HttpDelete("users/{userId}/watchlist/{productId}")]
