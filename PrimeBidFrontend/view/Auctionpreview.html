@@ -43,16 +43,18 @@
                 <textarea id="additional-terms" placeholder=""></textarea>
             </div>
             
-            <div class="image-gallery">
-                <label for="images">Images</label>
-                <div class="image-thumbnail"><img id="image1" alt="Image 1" style="width: 100px; height: auto;"></div>
-                <div class="image-thumbnail"><img id="image2" alt="Image 2" style="width: 100px; height: auto;"></div>
-                <div class="image-thumbnail"><img id="image3" alt="Image 3" style="width: 100px; height: auto;"></div>
+            <div class="image-gallery" style="display: flex; flex-direction: column; ; margin-bottom: 20px;">
+                <label for="images" style="margin-bottom: 10px; font-weight: bold; color: #e2e8f0;">Images</label>
+                <div class="image-thumbnail" style="width: 470px; height: 80px; background-color: rgba(33, 33, 33, 1); border-radius: 4px; display: flex; justify-content: center; align-items: center;">
+                    <img id="image1" src="images/Item.jpg " alt="Image 1" style="max-width: 100%; height: auto; border-radius: 4px;">
+                </div>
             </div>
+            
                 
             <div class="form-buttons">
                 <button type="button" class="cancel-button" onclick="cancel()">Cancel</button>
-                <button type="submit" class="next-button">Post</button>
+                
+                <a href="WaitingForApproval.html" class="next-button">Post</a>
             </div>
         </form>
     </div>
@@ -91,7 +93,7 @@
 }
 
 // Call the function with the desired item ID
-fetchAuctionItem(8);
+fetchAuctionItem(1);
     </script>
 </body>
 </html>

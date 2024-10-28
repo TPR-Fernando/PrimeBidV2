@@ -15,19 +15,18 @@ body {
     height: 100vh;
     margin: 0;
 }
+
 h1 {
     text-align: center;
     width: 100%;
 }
 
-
 .container {
-    
     padding: 20px;
     border-radius: 8px;
     width: 100%;
     max-width: 500px;
-    box-shadow: 0 10px 30px rgba(33, 33, 33, 1)
+    box-shadow: 0 10px 30px rgba(33, 33, 33, 1);
 }
 
 .form-header {
@@ -81,7 +80,6 @@ h1 {
     margin-top: 20px;
 }
 
-
 .cancel-button,
 .next-button {
     padding: 10px 20px;
@@ -100,6 +98,30 @@ h1 {
     background-color: #D2BC79;
     color: #1a202c;
 }
+
+.image-upload {
+    background-color: rgba(33, 33, 33, 1);
+    height: 100px; /* Adjust height as needed */
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center; /* Center align items vertically */
+    justify-content: flex-start; /* Align items to the left */
+    margin-bottom: 20px;
+}
+
+.image-preview {
+    width: 80px; /* Set width of the preview area */
+    height: 80px; /* Set height of the preview area */
+    background-color: rgba(33, 33, 33, 1);
+    border-radius: 4px;
+    margin-left: 10px; /* Space between button and preview */
+    background-size: cover; /* Ensure image covers the area */
+    background-position: center; /* Center the image */
+}
+
+
+
 .image-gallery {
     display: flex;
     justify-content: space-between;
@@ -116,11 +138,49 @@ h1 {
     align-items: center;
 }
 
-.image-thumbnail img {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 4px;
+
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
 }
+
+.preview-button,
+.post-button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.preview-button {
+    background-color: #D2BC79;
+    color: #1a202c;
+}
+
+.post-button {
+    background-color: #D2BC79;
+    color: #1a202c;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .image-gallery {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-thumbnail {
+        margin-bottom: 10px;
+    }
+
+    .preview-button,
+    .post-button {
+        width: 48%;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     .form-header h1 {

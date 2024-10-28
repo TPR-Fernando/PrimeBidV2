@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill Details</title>
+    <link rel="stylesheet" href="css/Addpic.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <button class="back-button">&larr;</button>
+            <h1>Add Images</h1>
+        </div>
+        <form id="auction-item-form" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="images" class="image-label">Images</label>
+                <div class="image-upload" onclick="document.getElementById('image-input').click();">
+                    <input type="file" id="image-input" name="file" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                    <div class="image-preview"></div>
+                    <button type="button" class="add-image-button">Add Image <span>+</span></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="item-description">Image Name</label>
+                <textarea id="item-description" placeholder="Save as Item.jpg ot Item.png" required></textarea>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="preview-button">Done</button>
+                <a href="Auctionpreview.html" style="text-decoration: none;">
+                    <button type="button" class="post-button">Preview</button>
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.querySelector('.image-preview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.style.backgroundImage = `url(${e.target.result})`;
+                    preview.style.backgroundSize = 'cover'; // Cover the area
+                    preview.style.backgroundPosition = 'center'; // Center the image
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+       
+
+    </script>
+</body>
+</html>
