@@ -58,7 +58,7 @@
                 // Use the correct API endpoint and pass the productId parameter
                 const response = await fetch(https://localhost:7217/api/Details/products/${productId});
 
-                    if (!response.ok) {
+                if (!response.ok) {
                     throw new Error(Failed to fetch product details: ${ response.statusText });
                 }
 
