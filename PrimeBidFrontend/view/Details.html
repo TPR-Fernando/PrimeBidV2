@@ -1,95 +1,49 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auction Item Page</title>
-    <link rel="stylesheet" href="css/Details.css">
-</head>
-<body>
-    <div class="auction-container">
-        <div class="back-link">
-            <a href="index.html">← Back to Search</a>
-        </div>
-        <div class="auction-content">
-            <div class="image-gallery">
-                <div class="main-image">
-                    <img id="main-image" src="" alt="Main Image">
-                </div>
-            </div>
-            <div class="auction-details">
-                <h1 id="item-name">Product Name</h1>
-                <div class="bid-info-row">
-                    <p class="current-bid">Current Bid: <span id="currentBid">$0 USD</span> • <span id="totalBids">0 bids</span></p>
-                    <p class="estimate">Estimated: <span id="estimatedBid">$0 - $0 USD</span></p>
-                </div>
-                <div class="bid-section">
-                    <label for="max-bid">Set Max Bid:</label>
-                    <select id="max-bid">
-                        <!-- Bid options dynamically generated -->
-                    </select>
-                    <button class="place-bid-btn" id="placeBidBtn">Place Bid</button>
-                </div>
-                <p class="description" id="item-description">
-                    Description goes here.
-                </p>
-                <p class="ends-in">Ends in: <strong id="end-date">Loading...</strong></p>
-                <div class="watchlist">
-                    <a href="#">Add to watchlist</a>
-                </div>
-            </div>
-        </div>
-    </div>
+﻿<script>
+    // Function to fetch product details from your back-end API
+    async function fetchProductDetails() {
+        // Extract the product ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
 
-    <!-- Fetch Product Data via JavaScript -->
-    <script>
-        // Function to fetch product details from your back-end API
-        async function fetchProductDetails() {
-            // Extract the product ID from the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = urlParams.get('id');
-
-            if (!productId) {
-                console.error("No product ID found in URL.");
-                return;
-            }
-
-            try {
-                // Use the correct API endpoint and pass the productId parameter
-                const response = await fetch(https://localhost:7217/api/Details/products/${productId});
-
-                if (!response.ok) {
-                    throw new Error(Failed to fetch product details: ${ response.statusText });
-                }
-
-                const product = await response.json();
-
-                // Dynamically update the HTML content with product details
-                document.getElementById('item-name').innerText = product.itemName;
-                document.getElementById('currentBid').innerText = $${ product.bidAmount || '0' } USD;
-                document.getElementById('estimatedBid').innerText = $${ product.estimatedBid } USD;
-                document.getElementById('item-description').innerText = product.itemDescription;
-                document.getElementById('end-date').innerText = new Date(product.endDate).toLocaleString();
-
-                // Set image sources dynamically (if available)
-                const mainImageSrc = product.itemImage ? product.itemImage : 'Resources/placeholder.jpg';
-                document.getElementById('main-image').src = mainImageSrc;
-
-                // Dynamically add bid options to the select element
-                const bidSelect = document.getElementById('max-bid');
-                [100, 200, 300, 400].forEach(amount => {
-                    const option = document.createElement('option');
-                    option.value = amount;
-                    option.text = $${ amount } USD;
-                    bidSelect.add(option);
-                });
-            } catch (error) {
-                console.error('Error fetching product details:', error);
-            }
+        if (!productId) {
+            console.error("No product ID found in URL.");
+            return;
         }
 
-        // Fetch product details on page load
-        window.addEventListener("DOMContentLoaded", fetchProductDetails);
-    </script>
-</body>
-</html>
+        try {
+            // Use the correct API endpoint and pass the productId parameter
+            const response = await fetch(https://localhost:7217/api/Details/products/${productId});
+
+            if (!response.ok) {
+                throw new Error(Failed to fetch product details: ${ response.statusText });
+            }
+
+            const product = await response.json();
+
+            // Dynamically update the HTML content with product details
+            document.getElementById('item-name').innerText = product.itemName;
+            document.getElementById('currentBid').innerText = $${ product.bidAmount || '0' } USD;
+            document.getElementById('estimatedBid').innerText = $${ product.estimatedBid } USD;
+            document.getElementById('item-description').innerText = product.itemDescription;
+            document.getElementById('end-date').innerText = new Date(product.endDate).toLocaleString();
+
+            // Set image sources dynamically (if available)
+            const mainImageSrc = product.itemImage ? product.itemImage : 'Resources/placeholder.jpg';
+            document.getElementById('main-image').src = mainImageSrc;
+
+            // Dynamically add bid options to the select element
+            const bidSelect = document.getElementById('max-bid');
+            [100, 200, 300, 400].forEach(amount => {
+                const option = document.createElement('option');
+                option.value = amount;
+                option.text = $${ amount } USD;
+                bidSelect.add(option);
+            });
+        } catch (error) {
+            console.error('Error fetching product details:', error);
+        }
+    }
+
+    // Fetch product details on page load
+    window.addEventListener("DOMContentLoaded", fetchProductDetails);
+</script>
