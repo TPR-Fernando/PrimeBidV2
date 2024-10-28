@@ -31,10 +31,13 @@ namespace PrimeBidAPI.Controllers
 
             // Create a session
             HttpContext.Session.SetString("UserEmail", user.Email);
-            HttpContext.Session.SetString("UserFullName", user.FullName); 
+            HttpContext.Session.SetString("UserFullName", user.FullName);
 
             // Redirect to the Home page
-            return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Index", "Home");  This part is not necessary since JavaScript is already set up to Redirect the User. But i kept it just in case
+
+            // Return success message
+            return Ok(new { message = "Login successful" });
         }
 
         private string HashPassword(string password, string salt)
