@@ -21,33 +21,7 @@ namespace PrimeBidAPI.Controllers
             _context = context;
             _logger = logger;
         }
-        [HttpPost]
-        public async Task<IActionResult> CreateAuctionItem([FromBody] AuctionItem item)
-        {
-            if (item == null)
-            {
-                _logger.LogError("Received null item in CreateAuctionItem.");
-                return BadRequest("Item cannot be null.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Model validation failed in CreateAuctionItem: {@ModelState}", ModelState);
-                return BadRequest(ModelState); // Returns details of validation errors
-            }
-
-            try
-            {
-                var newItem = await _service.AddAuctionItem(item);
-                _logger.LogInformation("Auction item created successfully with ID {Id}.", newItem.Id);
-                return CreatedAtAction(nameof(CreateAuctionItem), new { id = newItem.Id }, newItem);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while creating auction item.");
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal server error occurred." });
-            }
-        }
+        
 
 
         [HttpGet("{id}")]
@@ -74,11 +48,46 @@ namespace PrimeBidAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        [HttpPost]
+        [Route("CreateAuctionItemWithPictures")]
+        public async Task<IActionResult> CreateAuctionItemWithPictures([FromForm] AuctionItemWithPictures model)
+        {
+            if (model.AuctionItem == null || model.Files == null || model.Files.Length == 0)
+            {
+                return BadRequest("Auction item or files are missing.");
+            }
 
+            try
+            {
+                // Save the auction item to the database
+                _context.AuctionItems.Add(model.AuctionItem);
+                await _context.SaveChangesAsync(); // Save changes to get the Id for the auction item
 
+                // Save each file
+                foreach (var file in model.Files)
+                {
+                    if (file.Length > 0)
+                    {
+                        var filePath = Path.Combine("C:\\Users\\DELL\\source\\repos\\PrimeBidV2\\PrimeBidFrontend\\view\\Resources", file.FileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream); // Copy the uploaded file to the specified path
+                        }
+                    }
+                }
+
+                return Ok(new { message = "Auction item and images added successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
 
     }
-
-
 }
+
+
+
+
 
