@@ -1,0 +1,130 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #000;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+}
+
+.sidebar-header {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+    .menu li {
+        margin-bottom: 20px;
+    }
+
+    .menu a {
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        display: block;
+        padding: 10px;
+        background-color: #000;
+        border-radius: 4px;
+    }
+
+        .menu a:hover,
+        .menu a.active {
+            background-color: #D2BC79;
+        }
+
+.main-content {
+    margin-left: 250px;
+    padding: 40px;
+    width: calc(100% - 250px);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+    .user-table th,
+    .user-table td {
+        padding: 15px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .user-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+    .delete-btn:hover {
+        background-color: #ff1a1a;
+    }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+}
+
+    .pagination a {
+        color: black;
+        padding: 10px 20px;
+        margin: 0 5px;
+        text-decoration: none;
+        background-color: #f2f2f2;
+        border-radius: 4px;
+    }
+
+        .pagination a.active {
+            background-color: #4a7aff;
+            color: white;
+        }
+
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+        .logo {
+            margin-right: 10px; /* Add space between the logo and text */
+        }
+        
+        .brand-name {
+            color: #D2BC79; /* Set text color */
+            font-size: 24px; /* Adjust font size as needed */
+            font-weight: bold; /* Make text bold if desired */
+        }

@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fill Details</title>
     <link rel="stylesheet" href="css/AuctionItem.css">
+    <style>
+        /* Basic styles for image preview */
+        .image-preview {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .image-preview img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -20,7 +33,7 @@
 
             <div class="form-group">
                 <label for="category">Auction Category</label>
-                <input type="text" id="category" placeholder="Electronic" required>
+                <input type="text" id="category" placeholder="Categories:Antiques,Art,Clothing,Home and Decor,Accessories" required>
             </div>
 
             <div class="form-group">
@@ -43,69 +56,102 @@
                 <textarea id="additional-terms" placeholder="Enter any additional terms..."></textarea>
             </div>
 
+            <div class="form-group">
+                <label for="images" class="image-label">Images</label>
+                <div class="image-upload" onclick="document.getElementById('image-input').click();">
+                    <input type="file" id="image-input" name="Files" accept="image/*" multiple style="display: none;" onchange="previewImages(event)">
+                    <div class="image-preview" id="image-preview"></div>
+                    <button type="button" class="add-image-button">Add Image <span>+</span></button>
+                </div>
+            </div>
+
             <div class="form-buttons">
                 <button type="button" class="cancel-button" onclick="cancel()">Cancel</button>
                 <button type="submit" class="post-button">Next</button>
             </div>
         </form>
     </div>
+
     <script>
-        document.getElementById('auction-item-form').addEventListener('submit', async function (event) {
-            event.preventDefault();
-    
-            // Collect form data and parse necessary fields
-            const data = {
-                productName: document.getElementById('product-name').value.trim(),
-                category: document.getElementById('category').value.trim(),
-                ItemDescription: document.getElementById('item-description').value.trim(), // Update property name
-                StartingBid: parseFloat(document.getElementById('starting-bid').value),  // Parse as float
-                AuctionDuration: parseInt(document.getElementById('auction-duration').value),   // Update property name
-                AdditionalTerms: document.getElementById('additional-terms').value.trim() // Update property name
-            };
-    
-            console.log("Data to be sent:", data);  // Log data for verification
-    
-            // Check for required fields
-            if (!data.productName || !data.category || !data.ItemDescription || isNaN(data.StartingBid) || isNaN(data.AuctionDuration)) {
-                alert("Please fill in all required fields correctly.");
-                return;
-            }
-    
-            try {
-                const response = await fetch("https://localhost:7217/api/AuctionItem", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                });
-    
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error("Error Response:", errorData);
-                    console.error("Status:", response.status, "Status Text:", response.statusText);
-                    alert(`Failed to submit auction item. Status: ${response.status}, Error: ${errorData.title || "Unknown error"}`);
-                } else {
-                    const responseData = await response.json();
-                    console.log("Success:", responseData);
-                    alert("Auction item created successfully!");
-                    // Optionally clear the form or redirect
+        function previewImages(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById('image-preview');
+            previewContainer.innerHTML = ''; // Clear previous previews
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    previewContainer.appendChild(img); // Append image to the preview container
                 }
-            } catch (error) {
-                console.error("Fetch Error:", error);
-                alert("An error occurred. Please check the console for details.");
-            }
+                reader.readAsDataURL(file);
+            });
+        }
+
+        document.getElementById('auction-item-form').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    // Create FormData object
+    const formData = new FormData();
+    
+    // Collect auction item details
+    const auctionItem = {
+        ProductName: document.getElementById('product-name').value.trim(),
+        Category: document.getElementById('category').value.trim(),
+        ItemDescription: document.getElementById('item-description').value.trim(),
+        StartingBid: parseFloat(document.getElementById('starting-bid').value),
+        AuctionDuration: parseInt(document.getElementById('auction-duration').value),
+        AdditionalTerms: document.getElementById('additional-terms').value.trim()
+    };
+
+    // Append auction item details to FormData
+    formData.append("AuctionItem.ProductName", auctionItem.ProductName);
+    formData.append("AuctionItem.Category", auctionItem.Category);
+    formData.append("AuctionItem.ItemDescription", auctionItem.ItemDescription);
+    formData.append("AuctionItem.StartingBid", auctionItem.StartingBid);
+    formData.append("AuctionItem.AuctionDuration", auctionItem.AuctionDuration);
+    formData.append("AuctionItem.AdditionalTerms", auctionItem.AdditionalTerms);
+
+    // Append images to FormData
+    const files = document.getElementById('image-input').files;
+    for (let i = 0; i < files.length; i++) {
+        formData.append("Files", files[i]);
+    }
+
+    console.log("Data to be sent:", auctionItem);  // Log auction item data for verification
+
+    // Check for required fields
+    if (!auctionItem.ProductName || !auctionItem.Category || !auctionItem.ItemDescription || isNaN(auctionItem.StartingBid) || isNaN(auctionItem.AuctionDuration)) {
+        alert("Please fill in all required fields correctly.");
+        return;
+    }
+
+    try {
+        const response = await fetch("https://localhost:7217/api/AuctionItem/CreateAuctionItemWithPictures", {
+            method: "POST",
+            body: formData // Use FormData as the body
         });
-    
-        function goBack() {
-            window.history.back(); // Navigates to the previous page
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error Response:", errorData);
+            console.error("Status:", response.status, "Status Text:", response.statusText);
+            alert(`Failed to submit auction item. Status: ${response.status}, Error: ${errorData.title || "Unknown error"}`);
+        } else {
+            const responseData = await response.json();
+            console.log("Success:", responseData);
+            alert("Auction item created successfully!");
+            window.location.href = "Auctionpreview.html"; // Redirect to the auction preview page
         }
-    
-        function cancel() {
-            document.getElementById('auction-item-form').reset(); // Resets the form
-        }
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        alert("An error occurred. Please check the console for details.");
+    }
+});
+
+
+
     </script>
-    
-    
 </body>
 </html>

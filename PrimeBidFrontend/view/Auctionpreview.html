@@ -83,9 +83,7 @@
         // Assuming images are a part of the response
         const imagePaths = data.imagePath.split(','); // Adjust if necessary
         document.getElementById('image1').src = imagePaths[0] || 'default-image-url.jpg';
-        document.getElementById('image2').src = imagePaths[1] || 'default-image-url.jpg';
-        document.getElementById('image3').src = imagePaths[2] || 'default-image-url.jpg';
-
+     
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         alert('Failed to fetch auction item details. Please try again.');
@@ -93,7 +91,7 @@
 }
 
 // Call the function with the desired item ID
-fetchAuctionItem(1);
+fetchAuctionItem(12);
     </script>
 </body>
 </html>
