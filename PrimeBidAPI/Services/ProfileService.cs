@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using PrimeBidAPI.Controllers;
 using PrimeBidAPI.Data;
 using PrimeBidAPI.Models;
 
@@ -7,11 +9,14 @@ namespace PrimeBidAPI.Services
     public class ProfileService : IProfileService
     {
         private readonly AuctionDbContext _dbContext; // Assuming AuctionDbContext is your EF Core DbContext
+        private readonly IProfileService _profileService;
+        private readonly ILogger<ProfileController> _logger;
 
         // Constructor to inject DbContext
-        public ProfileService(AuctionDbContext dbContext)
+        public ProfileService(AuctionDbContext dbContext, ILogger<ProfileController> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         // Fetch profile by user ID
@@ -39,7 +44,29 @@ namespace PrimeBidAPI.Services
             }
             return false; // Indicate failure (profile not found)
         }
+        public async Task<List<Profile>> GetAllProfilesAsync()
+        {
+            _logger.LogInformation("Fetching all user profiles.");
 
+            var profiles = await _dbContext.Profiles
+                .Select(p => new Profile
+                {
+                    Id = p.Id,
+                    FullName = p.FullName,
+                    Email = p.Email,
+                    Address = p.Address,
+                    PhoneNumber = p.PhoneNumber,
+                    ProfilePicture = p.ProfilePicture
+                })
+                .ToListAsync();
+
+            if (!profiles.Any())
+            {
+                _logger.LogWarning("No user profiles found.");
+            }
+
+            return profiles;
+        }
         // Delete profile by user ID
         public async Task DeleteProfileAsync(int userId)
         {
