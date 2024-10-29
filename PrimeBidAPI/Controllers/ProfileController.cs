@@ -41,6 +41,8 @@ namespace PrimeBidAPI.Controllers
             return Ok(profile); // Return profile data as JSON
         }
 
+        //Alternate Get User ID Method. Ive Commented it to not mess up the already existing code.
+
         // GET: api/profile/{userId}/bid-history
         [HttpGet("{userId}/bid-history")]
         public async Task<IActionResult> GetBidHistory(int userId)

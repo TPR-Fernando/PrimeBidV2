@@ -8,6 +8,7 @@ namespace PrimeBidAPI.Services
         Task<bool> UpdateProfileAsync(int userId, Profile profile); 
     }
 
+    /*
     //Validating the Session Key
     public async Task<bool> ValidateSessionKeyAsync(int userId, string sessionKey)
     {
@@ -15,4 +16,5 @@ namespace PrimeBidAPI.Services
         var session = await _sessionRepository.GetSessionAsync(userId, sessionKey);
         return session != null && session.IsActive;
     }
+    */
 }
