@@ -146,18 +146,12 @@
             });
 
             if (response.ok) {
-                window.location.href = "WaitingForApproval.html"; // Redirect on success
-            } else {
-                // Attempt to parse error data only if there’s an error
-                try {
-                    const errorData = await response.json();
-                    console.error("Error Response:", errorData);
-                    alert(`Failed to submit auction item. Status: ${response.status}, Error: ${errorData.title || "Unknown error"}`);
-                } catch (jsonError) {
-                    console.error("Error parsing JSON:", jsonError);
-                    alert(`Failed to submit auction item. Status: ${response.status}`);
-                }
-            }
+    window.location.href = "WaitingForApproval.html"; // Redirect on success
+} else {
+    const errorData = await response.json();
+    console.error("Error Response:", errorData);
+    alert(`Failed to submit auction item. Status: ${response.status}, Error: ${errorData.error}`);
+}
 
         });
     </script>
