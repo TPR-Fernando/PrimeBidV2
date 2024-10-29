@@ -28,7 +28,7 @@
                     <select id="max-bid">
                         <!-- Bid options dynamically generated -->
                     </select>
-                    <button class="place-bid-btn" id="placeBidBtn">Place Bid</button>
+                    <button class="place-bid-btn" id="placeBidBtn" onclick="redirectToOrderConfirmation()">Place Bid</button>
                 </div>
                 <p class="description" id="item-description">
                     Description goes here.
@@ -89,6 +89,19 @@
     
         // Fetch product details on page load
         window.addEventListener("DOMContentLoaded", fetchProductDetails);
+
+        function redirectToOrderConfirmation() {
+    const productId = new URLSearchParams(window.location.search).get('id');
+    const bidAmount = document.getElementById('max-bid').value;
+    const itemName = document.getElementById('item-name').innerText; // Get item name
+    const itemImage = document.getElementById('main-image').src; // Get item image
+
+    const orderConfirmationURL = `orderconfirmation.html?itemId=${productId}&bidAmount=${bidAmount}&itemName=${encodeURIComponent(itemName)}&itemImage=${encodeURIComponent(itemImage)}`;
+    window.location.href = orderConfirmationURL;
+}
+
+
+
     </script>
     
 </body>
