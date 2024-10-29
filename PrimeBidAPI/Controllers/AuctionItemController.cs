@@ -21,7 +21,7 @@ namespace PrimeBidAPI.Controllers
             _context = context;
             _logger = logger;
         }
-        
+
 
 
         [HttpGet("{id}")]
@@ -48,6 +48,7 @@ namespace PrimeBidAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
         [HttpPost]
         [Route("CreateAuctionItemWithPictures")]
         public async Task<IActionResult> CreateAuctionItemWithPictures([FromForm] AuctionItemWithPictures model)
@@ -61,29 +62,55 @@ namespace PrimeBidAPI.Controllers
             {
                 // Save the auction item to the database
                 _context.AuctionItems.Add(model.AuctionItem);
-                await _context.SaveChangesAsync(); // Save changes to get the Id for the auction item
+                await _context.SaveChangesAsync();
 
-                // Save each file
+                // Directory for saving files
+                var resourceDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
+                if (!Directory.Exists(resourceDirectory))
+                {
+                    Directory.CreateDirectory(resourceDirectory); // Create the directory if missing
+                }
+
+                // Track whether the image URL was set
+                bool isImageUrlSet = false;
+
                 foreach (var file in model.Files)
                 {
                     if (file.Length > 0)
                     {
-                        var filePath = Path.Combine("C:\\Users\\DELL\\source\\repos\\PrimeBidV2\\PrimeBidFrontend\\view\\AuctionItems", file.FileName);
+                        var filePath = Path.Combine(resourceDirectory, file.FileName);
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
-                            await file.CopyToAsync(stream); // Copy the uploaded file to the specified path
+                            await file.CopyToAsync(stream);
+                        }
+
+                        var imageUrl = $"https://localhost:7217/Resources/{file.FileName}";
+
+                        // Set the ImageUrl only if not already set (for the first image)
+                        if (!isImageUrlSet)
+                        {
+                            model.AuctionItem.ImageUrl = imageUrl;
+                            isImageUrlSet = true;
                         }
                     }
                 }
+
+                // Update the auction item with the ImageUrl
+                _context.AuctionItems.Update(model.AuctionItem);
+                await _context.SaveChangesAsync();
 
                 return Ok(new { message = "Auction item and images added successfully." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = ex.Message });
+                _logger.LogError(ex, "An error occurred while saving AuctionItem.");
+                return StatusCode(500, new
+                {
+                    error = ex.Message,
+                    innerException = ex.InnerException?.Message
+                });
             }
         }
-
     }
 }
 

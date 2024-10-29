@@ -1,4 +1,6 @@
-﻿namespace PrimeBidAPI.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PrimeBidAPI.Models
 {
     public class Item
     {
@@ -15,6 +17,7 @@
         public virtual ICollection<BidHistory> BidHistories { get; set; } = new List<BidHistory>();
 
         // PaymentItems relationship with Foreign Key
+        [NotMapped]
         public virtual ICollection<PaymentItemsModel>? PaymentItems { get; set; } = new List<PaymentItemsModel>();
     }
 }

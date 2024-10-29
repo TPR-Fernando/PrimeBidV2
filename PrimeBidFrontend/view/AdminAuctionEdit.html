@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Auction Item</title>
+    <link rel="stylesheet" href="css/adminUsers.css">
+    <style>
+        /* Basic form styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #444;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .save-btn {
+            background-color: #5f5cca;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .save-btn:hover {
+            background-color: #4a47b3;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Edit Auction Item Details</h2>
+
+    <form id="editForm" method="post">
+        <input type="hidden" id="itemId" name="ItemId" value="" />
+
+        <div class="form-group">
+            <label>Item Name</label>
+            <input type="text" id="itemName" name="ItemName" />
+            <div class="error" id="itemNameError" style="color:red;"></div> <!-- Error message for Item Name -->
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea id="itemDescription" name="ItemDescription"></textarea>
+            <div class="error" id="itemDescriptionError" style="color:red;"></div>
+            <!-- Error message for Description -->
+        </div>
+        <div class="form-group">
+            <label>Category</label>
+            <input type="text" id="itemCategory" name="Category" />
+            <div class="error" id="itemCategoryError" style="color:red;"></div> <!-- Error message for Category -->
+        </div>
+        <div class="form-group">
+            <label>Starting Bid</label>
+            <input type="text" id="estimatedBid" name="EstimatedBid" />
+            <div class="error" id="estimatedBidError" style="color:red;"></div> <!-- Error message for Starting Bid -->
+        </div>
+        <div class="form-group">
+            <label>End Date</label>
+            <input type="text" id="endDate" name="EndDate" />
+            <div class="error" id="endDateError" style="color:red;"></div> <!-- Error message for End Date -->
+        </div>
+        <div class="form-group">
+            <label>Current Bid (Read-only)</label>
+            <input type="text" id="currentBid" name="CurrentBid" readonly />
+        </div>
+        <div>
+            <button type="submit" class="save-btn">Save Changes</button>
+        </div>
+    </form>
+
+    <script>
+        const apiUrl = "https://localhost:7217/api/Details/products";
+
+        async function apiFetch(url, options = {}) {
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    const errorMessage = await response.text();
+                    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${errorMessage}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error("API error:", error);
+                alert("Operation failed: " + error.message);
+            }
+        }
+
+        async function fetchProductDetails(productId) {
+            const product = await apiFetch(`${apiUrl}/${productId}`);
+            if (product) {
+                document.getElementById("itemId").value = product.id; // Keep item ID for reference
+                document.getElementById("itemName").value = product.itemName;
+                document.getElementById("itemDescription").value = product.itemDescription;
+                document.getElementById("itemCategory").value = product.category;
+                document.getElementById("estimatedBid").value = product.estimatedBid;
+                document.getElementById("endDate").value = new Date(product.endDate).toISOString(); // Change to ISO format for consistency
+                document.getElementById("currentBid").value = product.bidAmount || '0'; // Display current bid
+            } else {
+                alert("Product not found!");
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        fetchProductDetails(productId);
+
+        document.getElementById("editForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const itemId = parseInt(document.getElementById("itemId").value);
+            const itemName = document.getElementById("itemName").value;
+            const itemDescription = document.getElementById("itemDescription").value;
+            const itemCategory = document.getElementById("itemCategory").value;
+            const estimatedBid = document.getElementById("estimatedBid").value;
+            const endDate = document.getElementById("endDate").value;
+
+            // Prepare item data for submission
+            const itemData = {
+                id: itemId,
+                itemName: itemName,
+                itemImage: "string", // Update with actual image value if available
+                estimatedBid: estimatedBid.trim(), // Ensure it's a string
+                itemDescription: itemDescription,
+                endDate: new Date(endDate).toISOString(), // Ensure it's in ISO format
+                category: itemCategory,
+                bidAmount: 0 // Update with the correct current bid amount if needed
+            };
+
+            // Log the itemData being sent to the server
+            console.log("Submitting item data:", JSON.stringify(itemData));
+
+            // Use the new endpoint for updating the product
+            const response = await apiFetch(`${apiUrl}/edit`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(itemData),
+            });
+
+            if (response) {
+                alert("Product updated successfully!");
+                window.location.href = "AdminAuctions.html";
+            }
+        });
+    </script>
+</body>
+
+
+</html>

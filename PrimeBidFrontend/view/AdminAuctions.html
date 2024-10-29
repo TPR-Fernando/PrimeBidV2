@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Auction Management</title>
+    <link rel="stylesheet" href="css/adminUsers.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="Resources/logo.png" alt="Prime Bid logo" class="logo">
+                <span class="brand-name">Prime BID</span>
+            </div>
+            <ul class="menu">
+                <li><a href="AdminUsers.html">Users</a></li>
+                <li><a href="#" class="active">Auction Management</a></li>
+                <li><a href="AdminAuctionConfirmation.html" class="">Auction Confirmation</a></li>
+              
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <h1>Auction List</h1>
+
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>Item Id</th>
+                        <th>Item Name</th>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Starting Bid</th>
+                        <th>Current Bid</th>
+                        <th>End Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be generated dynamically here -->
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <a href="#">&laquo;</a>
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">&raquo;</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/Admin.js"></script>
+</body>
+
+</html>
