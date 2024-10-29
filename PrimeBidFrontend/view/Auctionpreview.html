@@ -15,45 +15,49 @@
         <form id="preview-form">
             <div class="form-group">
                 <label for="product-name">Product Name</label>
-                <input type="text" id="product-name" placeholder="">
+                <input type="text" id="product-name" placeholder="" readonly>
             </div>
 
             <div class="form-group">
                 <label for="category">Category</label>
-                <input type="text" id="category" placeholder="">
+                <input type="text" id="category" placeholder="" readonly>
             </div>
 
             <div class="form-group">
                 <label for="item-description">Item Description</label>
-                <textarea id="item-description" placeholder=""></textarea>
+                <textarea id="item-description" placeholder="" readonly></textarea>
             </div>
 
             <div class="form-group">
                 <label for="starting-bid">Starting Bid</label>
-                <input type="text" id="starting-bid" placeholder="" required>
+                <input type="text" id="starting-bid" placeholder="" required readonly>
             </div>
 
             <div class="form-group">
                 <label for="auction-duration">Auction Duration</label>
-                <input type="text" id="auction-duration" placeholder="">
+                <input type="text" id="auction-duration" placeholder="" readonly>
             </div>
 
             <div class="form-group">
                 <label for="additional-terms">Additional Terms and Conditions</label>
-                <textarea id="additional-terms" placeholder=""></textarea>
+                <textarea id="additional-terms" placeholder="" readonly></textarea>
             </div>
             
-            <div class="image-gallery" style="display: flex; flex-direction: column; ; margin-bottom: 20px;">
+            <div class="image-gallery" style="display: flex; flex-direction: column; margin-bottom: 20px;">
                 <label for="images" style="margin-bottom: 10px; font-weight: bold; color: #e2e8f0;">Images</label>
                 <div class="image-thumbnail" style="width: 470px; height: 80px; background-color: rgba(33, 33, 33, 1); border-radius: 4px; display: flex; justify-content: center; align-items: center;">
-                    <img id="image1" src="images/Item.jpg " alt="Image 1" style="max-width: 100%; height: auto; border-radius: 4px;">
+                    <img id="image1" src="images/default.jpg" alt="Image 1" style="max-width: 100%; height: auto; border-radius: 4px;">
+                </div>
+                <div class="image-thumbnail" style="width: 470px; height: 80px; background-color: rgba(33, 33, 33, 1); border-radius: 4px; display: flex; justify-content: center; align-items: center;">
+                    <img id="image2" src="images/default.jpg" alt="Image 2" style="max-width: 100%; height: auto; border-radius: 4px;">
+                </div>
+                <div class="image-thumbnail" style="width: 470px; height: 80px; background-color: rgba(33, 33, 33, 1); border-radius: 4px; display: flex; justify-content: center; align-items: center;">
+                    <img id="image3" src="images/default.jpg" alt="Image 3" style="max-width: 100%; height: auto; border-radius: 4px;">
                 </div>
             </div>
-            
                 
             <div class="form-buttons">
                 <button type="button" class="cancel-button" onclick="cancel()">Cancel</button>
-                
                 <a href="WaitingForApproval.html" class="next-button">Post</a>
             </div>
         </form>
@@ -61,39 +65,47 @@
 
     <script>
         async function fetchAuctionItem(itemId) {
-    try {
-        console.log(`Fetching auction item with ID: ${itemId}`);
-        const response = await fetch(`http://localhost:5115/api/AuctionItem/${itemId}`);
+            try {
+                console.log(`Fetching auction item with ID: ${itemId}`);
+                const response = await fetch(`http://localhost:5115/api/AuctionItem/${itemId}`);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Fetched data:', data);
+
+                // Populate form fields
+                document.getElementById('product-name').value = data.productName;
+                document.getElementById('category').value = data.category;
+                document.getElementById('item-description').value = data.itemDescription;
+                document.getElementById('starting-bid').value = data.startingBid;
+                document.getElementById('auction-duration').value = data.auctionDuration;
+                document.getElementById('additional-terms').value = data.additionalTerms;
+
+                // Assuming images are a part of the response
+                const imagePaths = data.imagePath ? data.imagePath.split(',') : []; // Adjust if necessary
+                document.getElementById('image1').src = imagePaths[0] || 'images/default.jpg';
+               
+
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+                alert('Failed to fetch auction item details. Please try again.');
+            }
         }
 
-        const data = await response.json();
-        console.log('Fetched data:', data);
+        // Call the function with the desired item ID (replace 1 with the actual item ID you want to fetch)
+        fetchAuctionItem(1);
+        
+        function goBack() {
+            window.history.back(); // Navigates to the previous page
+        }
 
-        // Populate form fields
-        document.getElementById('product-name').value = data.productName;
-        document.getElementById('category').value = data.category;
-        document.getElementById('item-description').value = data.itemDescription;
-        document.getElementById('starting-bid').value = data.startingBid;
-        document.getElementById('auction-duration').value = data.auctionDuration;
-        document.getElementById('additional-terms').value = data.additionalTerms;
-
-        // Assuming images are a part of the response
-        const imagePaths = data.imagePath.split(','); // Adjust if necessary
-        document.getElementById('image1').src = imagePaths[0] || 'default-image-url.jpg';
-        document.getElementById('image2').src = imagePaths[1] || 'default-image-url.jpg';
-        document.getElementById('image3').src = imagePaths[2] || 'default-image-url.jpg';
-
-    } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-        alert('Failed to fetch auction item details. Please try again.');
-    }
-}
-
-// Call the function with the desired item ID
-fetchAuctionItem(1);
+        function cancel() {
+            // Optionally reset or clear any actions
+            window.history.back(); // Or just reset the form if you prefer
+        }
     </script>
 </body>
 </html>
