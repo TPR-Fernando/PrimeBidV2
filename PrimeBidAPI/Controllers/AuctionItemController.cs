@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PrimeBidAPI.Data;
 using PrimeBidAPI.Models;
 using PrimeBidAPI.Services;
@@ -63,8 +62,6 @@ namespace PrimeBidAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
-
 
     }
 

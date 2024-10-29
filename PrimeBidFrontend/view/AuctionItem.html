@@ -19,8 +19,14 @@
             </div>
 
             <div class="form-group">
-                <label for="category">Auction Category</label>
-                <input type="text" id="category" placeholder="Electronic" required>
+                <label for="category">Select the category</label>
+                <select id="category" required>
+                    <option value="">Select...</option>
+                    <option>Electronics</option>
+                    <option>Fashion</option>
+                    <option>Home Appliances</option>
+                    <option>Books</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -30,7 +36,7 @@
 
             <div class="form-group">
                 <label for="starting-bid">Starting Bid</label>
-                <input type="number" id="starting-bid" placeholder="100" required>
+                <input type="number" id="starting-bid" placeholder="$100" required>
             </div>
 
             <div class="form-group">
@@ -43,50 +49,21 @@
                 <textarea id="additional-terms" placeholder="Enter any additional terms..."></textarea>
             </div>
 
+           
+
             <div class="form-buttons">
                 <button type="button" class="preview-button">Cancel</button>
-                <button type="submit" class="post-button">Next</button>
+                <a href="Addpic.html" style="text-decoration: none;">
+                    <button type="button" class="post-button">Next</button>
+                </a>
+                
             </div>
         </form>
     </div>
 
     <script>
-        document.getElementById('auction-item-form').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent form from submitting the traditional way
-            
-            const data = {
-                productName: document.getElementById('product-name').value,
-                category: document.getElementById('category').value,
-                description: document.getElementById('item-description').value,
-                startingBid: parseFloat(document.getElementById('starting-bid').value),
-                duration: parseInt(document.getElementById('auction-duration').value),
-                terms: document.getElementById('additional-terms').value
-            };
+    
 
-            try {
-                const response = await fetch("http://localhost:5115/api/AuctionItem", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error("Error:", errorData);
-                    alert("Failed to submit auction item. Check the console for details.");
-                } else {
-                    const responseData = await response.json();
-                    console.log("Success:", responseData);
-                    alert("Auction item created successfully!");
-                    // Optionally, you can clear the form or redirect the user here
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                alert("An error occurred. Check the console for details.");
-            }
-        });
     </script>
 </body>
 </html>
