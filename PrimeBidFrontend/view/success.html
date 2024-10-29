@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0E2033',
+                        accent: '#c7ffd8',
+                        textWhite: '#FFFFFF',
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-primary text-textWhite flex flex-col items-center justify-center min-h-screen">
+
+<div class="container max-w-lg bg-gray-600 rounded-lg shadow-lg p-6 mx-auto">
+    <h1 class="text-3xl font-bold text-accent mb-4">Payment Successful!</h1>
+    <p class="text-lg text-accent mb-4">Thank you for your payment. Your transaction has been completed.</p>
+    <p id="transaction-id" class="text-xl text-accent mb-4"></p>
+    <a href="/" class="py-2 px-4 bg-accent text-black rounded-lg hover:bg-green-300 transition-colors">Go to Home</a>
+</div>
+
+<script>
+    // Retrieve the transaction ID from URL
+    const params = new URLSearchParams(window.location.search);
+    const transactionId = params.get('transactionId');
+    if (transactionId) {
+        document.getElementById('transaction-id').textContent = 'Transaction ID: ' + transactionId;
+    } else {
+        document.getElementById('transaction-id').textContent = 'Transaction ID not available.';
+    }
+</script>
+</body>
+</html>
