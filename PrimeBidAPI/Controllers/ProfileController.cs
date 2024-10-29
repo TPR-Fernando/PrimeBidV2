@@ -42,7 +42,7 @@ namespace PrimeBidAPI.Controllers
         }
 
         /*
-        //Alternate Get User ID Method. Ive Commented it to not mess up the already existing code.
+        //Alternate Get User ID Method. Ive Commented it to not mess up the already existing code. : Chanuka
 
         // GET: api/profile/{userId}
         [HttpGet("{userId}")]
