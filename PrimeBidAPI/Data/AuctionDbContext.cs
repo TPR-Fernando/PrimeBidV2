@@ -14,7 +14,7 @@ namespace PrimeBidAPI.Data
         public DbSet<BidHistory> BidHistories { get; set; }
         public DbSet<WatchlistModel> Watchlists { get; set; }
 
-       
+
 
         // DbSets for PrimeBid context
         public DbSet<Item> Items { get; set; }
@@ -67,6 +67,12 @@ namespace PrimeBidAPI.Data
                 .HasOne(pi => pi.Item)
                 .WithMany(i => i.PaymentItems)
                 .HasForeignKey(pi => pi.ItemId);
+
+            modelBuilder.Entity<PaymentItemsModel>()
+                .HasOne<Item>()
+                .WithMany(i => i.PaymentItems)
+                .HasForeignKey(pi => pi.ItemId)
+                .OnDelete(DeleteBehavior.Cascade); // Enables cascade delete
         }
     }
 }
