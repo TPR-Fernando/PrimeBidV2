@@ -41,7 +41,37 @@ namespace PrimeBidAPI.Controllers
             return Ok(profile); // Return profile data as JSON
         }
 
+        /*
         //Alternate Get User ID Method. Ive Commented it to not mess up the already existing code.
+
+        // GET: api/profile/{userId}
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetProfile(int userId, [FromQuery] string sessionKey)
+        {
+            if (string.IsNullOrEmpty(sessionKey))
+            {
+                return Unauthorized(new { message = "Session key is required" });
+            }
+
+            // Validate session key and userId
+            var isSessionValid = await _profileService.ValidateSessionKeyAsync(userId, sessionKey);
+            if (!isSessionValid)
+            {
+                _logger.LogWarning($"Invalid session key for userId: {userId}");
+                return Unauthorized(new { message = "Invalid session key" });
+            }
+
+            var profile = await _profileService.GetProfileAsync(userId);
+            if (profile == null)
+            {
+                _logger.LogWarning($"Profile not found for userId: {userId}");
+                return NotFound(new { message = "Profile not found" });
+            }
+
+            return Ok(profile); // Return profile data as JSON
+        }
+        */
+
 
         // GET: api/profile/{userId}/bid-history
         [HttpGet("{userId}/bid-history")]
