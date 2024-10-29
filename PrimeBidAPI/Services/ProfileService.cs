@@ -57,6 +57,11 @@ namespace PrimeBidAPI.Services
             _dbContext.Profiles.Remove(profile);
             await _dbContext.SaveChangesAsync();
         }
+        public IEnumerable<Profile> GetAllProfiles()
+        {
+            return _dbContext.Profiles.ToList(); // Assuming you have a DbSet<Profile> in your AuctionDbContext
+        }
+
 
     }
 }

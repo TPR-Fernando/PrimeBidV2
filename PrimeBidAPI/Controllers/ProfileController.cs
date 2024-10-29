@@ -95,4 +95,4 @@ namespace PrimeBidAPI.Controllers
             return Ok(new { message = "Profile updated successfully" });
         }
     }
-}
+  }

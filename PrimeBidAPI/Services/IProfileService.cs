@@ -5,6 +5,8 @@ namespace PrimeBidAPI.Services
     public interface IProfileService
     {
         Task<Profile?> GetProfileAsync(int userId);
-        Task<bool> UpdateProfileAsync(int userId, Profile profile); 
+        Task<bool> UpdateProfileAsync(int userId, Profile profile);
+        IEnumerable<Profile> GetAllProfiles();
     }
+  
 }
