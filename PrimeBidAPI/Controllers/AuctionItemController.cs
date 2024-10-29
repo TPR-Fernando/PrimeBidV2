@@ -68,7 +68,7 @@ namespace PrimeBidAPI.Controllers
                 {
                     if (file.Length > 0)
                     {
-                        var filePath = Path.Combine("C:\\Users\\DELL\\source\\repos\\PrimeBidV2\\PrimeBidFrontend\\view\\Resources", file.FileName);
+                        var filePath = Path.Combine("C:\\Users\\DELL\\source\\repos\\PrimeBidV2\\PrimeBidFrontend\\view\\AuctionItems", file.FileName);
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await file.CopyToAsync(stream); // Copy the uploaded file to the specified path
