@@ -25,6 +25,8 @@ namespace PrimeBidAPI.Data
         public DbSet<AuctionItem> AuctionItems { get; set; }
         //AuctionPic
         public DbSet<Auctionpicture> AuctionPic { get; set; }
+        //AuctionItemWithPictures
+        public DbSet<AuctionItemWithPictures> AuctionItemWithPictures { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

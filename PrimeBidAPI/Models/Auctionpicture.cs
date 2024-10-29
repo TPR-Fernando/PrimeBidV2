@@ -13,9 +13,10 @@ namespace PrimeBidAPI.Models
 
         public string FileName { get; set; } // Stores the file name, e.g., "image.jpg"
 
-        public byte[] FileData { get; set; } // Store file content as binary data (optional)
+        public string FilePath { get; set; } // Path to where the file is saved
 
-        // Alternatively, use a file path if storing files in the file system
-        // public string FilePath { get; set; } // Path to where the file is saved
+        public DateTime UploadDate { get; set; } = DateTime.Now; // Default to current time
+
+        public int AuctionItemId { get; set; } // To associate with auction items
     }
 }

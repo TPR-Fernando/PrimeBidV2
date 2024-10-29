@@ -21,7 +21,7 @@ namespace PrimeBidAPI.Models
         public int AuctionDuration { get; set; }
 
         public string AdditionalTerms { get; set; }
-
+    
 
     }
 }
