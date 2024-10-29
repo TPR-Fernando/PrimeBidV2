@@ -8,5 +8,4 @@ namespace PrimeBidAPI.Services
         Task<bool> UpdateProfileAsync(int userId, Profile profile);
         IEnumerable<Profile> GetAllProfiles();
     }
-  
 }

@@ -3,6 +3,9 @@ using PrimeBidAPI.Models;
 using PrimeBidAPI.Services;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using PrimeBidAPI.Data;
+using Microsoft.Data.SqlClient;
 
 namespace PrimeBidAPI.Controllers
 {
@@ -13,15 +16,18 @@ namespace PrimeBidAPI.Controllers
         private readonly WatchlistService _watchlistService;
         private readonly ProductService _productService;
         private readonly ILogger<DetailsController> _logger;
+        private readonly AuctionDbContext _context;
 
         public DetailsController(
             ProductService productService,
             WatchlistService watchlistService,
+            AuctionDbContext context,
             ILogger<DetailsController> logger)
         {
             _productService = productService;
             _watchlistService = watchlistService;
             _logger = logger;
+            _context = context;
         }
 
         [HttpGet("products/{id}")]
@@ -87,5 +93,46 @@ namespace PrimeBidAPI.Controllers
 
             return Ok(popularAuctions);
         }
+
+        [HttpDelete("products/{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            _logger.LogInformation("Deleting product with ID: {ProductId}", id);
+
+            // SQL query to delete the product
+            var sqlQuery = "DELETE FROM [dbo].[Items] WHERE Id = @ProductId";
+
+            // Execute the delete command
+            var affectedRows = await _context.Database.ExecuteSqlRawAsync(sqlQuery, new SqlParameter("@ProductId", id));
+
+            if (affectedRows == 0)
+            {
+                _logger.LogWarning("Product with ID: {ProductId} not found.", id);
+                return NotFound(new { message = "Product not found." });
+            }
+
+            _logger.LogInformation("Product with ID: {ProductId} successfully deleted.", id);
+            return Ok(new { message = "Product deleted successfully." });
+        }
+
+        [HttpPut("products/edit")]
+        public async Task<IActionResult> EditProduct([FromBody] ItemDto itemDto)
+        {
+            if (itemDto == null || itemDto.Id <= 0)
+            {
+                _logger.LogWarning("Invalid product data.");
+                return BadRequest(new { message = "Invalid product data." });
+            }
+
+            var result = await _productService.EditProductAsync(itemDto);
+            if (!result)
+            {
+                return NotFound(new { message = "Product not found." });
+            }
+
+            return Ok(new { message = "Product updated successfully." });
+        }
+
+
     }
 }

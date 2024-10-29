@@ -131,6 +131,43 @@ namespace PrimeBidAPI.Services
             return popularAuctions;
         }
 
+        public async Task<bool> EditProductAsync(ItemDto itemDto)
+        {
+            _logger.LogInformation("Editing product with ID: {ProductId}", itemDto.Id);
+
+            // SQL query for updating the item
+            var sqlQuery = @"
+                UPDATE [dbo].[Items]
+                SET ItemName = @ItemName,
+                    ItemDescription = @ItemDescription,
+                    Category = @Category,
+                    EstimatedBid = @EstimatedBid,
+                    EndDate = @EndDate
+                WHERE Id = @ProductId";
+
+            var parameters = new[]
+            {
+                new SqlParameter("@ItemName", itemDto.ItemName),
+                new SqlParameter("@ItemDescription", itemDto.ItemDescription),
+                new SqlParameter("@Category", itemDto.Category),
+                new SqlParameter("@EstimatedBid", itemDto.EstimatedBid),
+                new SqlParameter("@EndDate", itemDto.EndDate),
+                new SqlParameter("@ProductId", itemDto.Id)
+            };
+
+            var rowsAffected = await _context.Database.ExecuteSqlRawAsync(sqlQuery, parameters);
+
+            if (rowsAffected > 0)
+            {
+                _logger.LogInformation("Product with ID: {ProductId} successfully updated.", itemDto.Id);
+                return true; // Update successful
+            }
+
+            _logger.LogWarning("Product with ID: {ProductId} not found or no changes made.", itemDto.Id);
+            return false; // No product found or no changes made
+        }
+
+
 
     }
 }
