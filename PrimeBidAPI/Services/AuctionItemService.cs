@@ -47,7 +47,7 @@ namespace PrimeBidAPI.Services
                 ItemName = auctionItem.ProductName,
                 ItemDescription = auctionItem.ItemDescription,
                 Category = auctionItem.Category,
-                Price = auctionItem.StartingBid,
+                EstimatedBid = auctionItem.StartingBid.ToString(),
                 EndDate = auctionItem.AuctionEndDate,
                 ItemImage = auctionItem.ImageUrl
             };

@@ -34,16 +34,16 @@ namespace PrimeBidAPI.Controllers
 
         private bool IsSessionValid()
         {
-            return HttpContext.Session.GetInt32("UserId") != null;
+            return Instances.CurrentSession.GetInt32("UserId")!=null;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetProfile()
         {
             if (!IsSessionValid())
-                return Unauthorized(new { error = "Session expired. Please login again." });
+                return Unauthorized(new { error = $"Session expired. Please login again." });
 
-            var userId = HttpContext.Session.GetInt32("UserId").Value;
+            var userId = Instances.CurrentSession.GetInt32("UserId").Value;
             var profile = await _profileService.GetProfileAsync(userId);
 
             if (profile == null)
@@ -53,7 +53,7 @@ namespace PrimeBidAPI.Controllers
             }
 
             // Only return essential fields
-            return Ok(new { fullName = profile.FullName, email = profile.Email });
+            return Ok(new { fullName = profile.FullName, email = profile.Email, address =profile.Address, phone = profile.PhoneNumber });
         }
 
         [HttpGet("bid-history")]
@@ -96,7 +96,7 @@ namespace PrimeBidAPI.Controllers
             if (!IsSessionValid())
                 return Unauthorized(new { error = "Session expired. Please login again." });
 
-            var userId = HttpContext.Session.GetInt32("UserId").Value;
+            var userId = Instances.CurrentSession.GetInt32("UserId").Value;
 
             if (profile == null || string.IsNullOrEmpty(profile.FullName) || string.IsNullOrEmpty(profile.Email))
                 return BadRequest(new { message = "Invalid profile data" });

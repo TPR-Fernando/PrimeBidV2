@@ -31,7 +31,7 @@ namespace PrimeBidAPI.Data
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(
-                    "Server=tcp:primebidserver.database.windows.net;Database=PrimeBidDB;User ID=admin2;Password=admin@20041127;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+                    "Data Source=Roro-Box\\SQLEXPRESS;Initial Catalog=PrimeBidDB;Integrated Security=True;Trust Server Certificate=True",
                     sqlServerOptionsAction: sqlOptions =>
                     {
                         sqlOptions.EnableRetryOnFailure(

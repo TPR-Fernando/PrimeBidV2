@@ -17,7 +17,7 @@ namespace PrimeBidAPI.Models
         public string? ItemDescription { get; set; }
 
         [Range(1, double.MaxValue, ErrorMessage = "Starting bid must be a positive number.")]
-        public decimal StartingBid { get; set; }
+        public decimal? StartingBid { get; set; }
         public DateTime AuctionEndDate { get; set; }
         public string? AdditionalTerms { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PrimeBidAPI.Models
 {
@@ -17,6 +18,7 @@ namespace PrimeBidAPI.Models
         //public virtual ICollection<PaymentItemsModel> PaymentItems { get; set; } = new List<PaymentItemsModel>();
 
         // Add this property back
+        [NotMapped]
         public virtual ICollection<Item> Items { get; set; } = new List<Item>();
     }
 }

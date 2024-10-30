@@ -1,6 +1,7 @@
 using PrimeBidAPI.Services;
 using PrimeBidAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using PrimeBidAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register the DbContext with connection string (assuming SQL Server)
 builder.Services.AddDbContext<AuctionDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AzureSQLConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDatabaseConnectionString")));
 
 // Add CORS to allow cross-origin requests
 builder.Services.AddCors(options =>
@@ -39,9 +40,11 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout as needed
-    options.Cookie.HttpOnly = true;
+    options.IOTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = false;
     options.Cookie.IsEssential = true;
 });
+
 
 
 // Inject the correct BraintreeService
@@ -53,8 +56,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
+
+app.UseSession(); // Use session middleware here
 
 // Enable Swagger in both development and production environments
 if (app.Environment.IsDevelopment())
@@ -81,7 +85,7 @@ app.UseCors("AllowAll");
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseSession(); // Use session middleware here
+
 
 // Enable Authorization middleware
 app.UseAuthorization();
