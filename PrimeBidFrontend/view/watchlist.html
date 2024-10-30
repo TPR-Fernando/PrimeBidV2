@@ -11,10 +11,10 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#0E2033',
+                        primary: '#000000',  // Black background
                         frosted: 'rgba(255, 255, 255, 0.1)',
-                        accent: '#c7ffd8',
-                        textWhite: '#FFFFFF',
+                        gold: '#D2BC79',     // Gold for buttons
+                        textWhite: '#D2BC79',
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.5s ease-out',
@@ -35,16 +35,22 @@
         }
     </script>
 </head>
-<body class="bg-[#0E2033] text-textWhite min-h-screen">
-<div class="flex flex-col md:flex-row min-h-screen">
-    <div class="backdrop-blur-md bg-frosted md:w-64 p-6 space-y-6 shadow-xl rounded-lg m-4 transition-transform duration-500 transform hover:scale-105">
-        <h2 class="text-3xl font-bold text-center">Menu</h2>
-        <ul class="space-y-4">
-            <li class="transform hover:scale-110 transition-transform duration-300"><a href="profile.html" class="block py-2 px-4 bg-frosted hover:bg-accent hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Profile</a></li>
-            <li class="transform hover:scale-110 transition-transform duration-300"><a href="bidhistory.html" class="block py-2 px-4 bg-frosted hover:bg-accent hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Bid History</a></li>
-            <li class="transform hover:scale-110 transition-transform duration-300"><a href="watchlist.html" class="block py-2 px-4 bg-frosted hover:bg-accent hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Watchlist</a></li>
-        </ul>
-        <button class="w-full bg-red-600 py-3 rounded-lg hover:bg-red-700 transition-colors duration-200 shadow-lg">Logout</button>
+<body class="bg-primary text-textWhite min-h-screen">
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <div class="backdrop-blur-md bg-frosted md:w-64 p-6 space-y-6 shadow-xl rounded-lg m-4 transition-transform duration-500 transform hover:scale-105">
+            <h2 class="text-3xl font-bold text-center">Menu</h2>
+            <ul class="space-y-4">
+                <li class="transform hover:scale-110 transition-transform duration-300">
+                    <a href="profile.html" class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Profile</a>
+                </li>
+                <li class="transform hover:scale-110 transition-transform duration-300">
+                    <a href="bidhistory.html" class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Bid History</a>
+                </li>
+                <li class="transform hover:scale-110 transition-transform duration-300">
+                    <a href="watchlist.html" class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Watchlist</a>
+                </li>
+            </ul>
+        <button class="w-full bg-gold text-primary py-3 rounded-lg hover:bg-primary hover:text-gold transition-colors duration-200 shadow-lg">Logout</button>
     </div>
 
     <div class="flex-grow p-6 animate-fade-in-up">
@@ -66,7 +72,7 @@ async function getWatchlist(UserId) {
         const response = await fetch(`https://localhost:7217/api/profile/${UserId}/watchlist`);
         
         if (!response.ok) {
-            const errorText = await response.text(); // Get response text for debugging
+            const errorText = await response.text();
             throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
         }
         
@@ -95,16 +101,13 @@ async function getWatchlist(UserId) {
     }
 }
 
-
-
 // Function to handle logout
 function handleLogout() {
-    // Redirect to the login page
     window.location.href = "LoginPage.html";
 }
 
 // Attach the event listener to the logout button
-document.querySelector("button.bg-red-600").addEventListener("click", handleLogout);
+document.querySelector("button.bg-gold").addEventListener("click", handleLogout);
 
 // Call the function with the appropriate user ID
 const UserId = 2; 
