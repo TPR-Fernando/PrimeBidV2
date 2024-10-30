@@ -119,34 +119,28 @@ namespace PrimeBidAPI.Controllers
             return Ok(profiles);
         }
 
-        // DELETE: api/profile/delete
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteProfile()
         {
-            // Retrieve the UserId from the session
             var sessionUserId = HttpContext.Session.GetInt32("UserId");
-
-            // Check if the session is valid
             if (sessionUserId == null)
                 return Unauthorized(new { error = "Session has expired. Please log in again." });
 
-            // SQL query to delete the profile
-            var sqlQuery = "DELETE FROM [dbo].[Profiles] WHERE Id = @UserId";
-
-            // Execute the delete command
-            var affectedRows = await _context.Database.ExecuteSqlRawAsync(sqlQuery, new SqlParameter("@UserId", sessionUserId.Value));
-
-            if (affectedRows == 0)
+            try
             {
-                _logger.LogWarning("Failed to delete profile for userId: {UserId}", sessionUserId.Value);
+                await _profileService.DeleteProfileAsync(sessionUserId.Value);
+                HttpContext.Session.Clear(); // Clear session upon successful delete
+                return Ok(new { message = "Profile deleted successfully." });
+            }
+            catch (KeyNotFoundException)
+            {
                 return NotFound(new { message = "User profile not found." });
             }
-
-            // Clear the session
-            HttpContext.Session.Clear();
-
-            _logger.LogInformation("Profile for userId: {UserId} deleted successfully.", sessionUserId.Value);
-            return Ok(new { message = "Profile deleted successfully." });
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while deleting the profile: {ex.Message}");
+                return StatusCode(500, new { message = "An error occurred while deleting the profile." });
+            }
         }
 
     }
