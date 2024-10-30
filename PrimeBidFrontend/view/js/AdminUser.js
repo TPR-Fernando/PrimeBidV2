@@ -45,11 +45,9 @@ function renderProfileRow(profile) {
     tableBody.appendChild(row);
 }
 
-// Function to delete a profile
-// Function to delete a profile
 async function deleteProfile(profileId) {
     if (confirm("Are you sure you want to delete this profile?")) {
-        const deleteUrl = `${apiUrl}/${profileId}`; // Construct the DELETE URL
+        const deleteUrl = `${apiUrl}/${profileId}`; // This should now match the expected DELETE endpoint
         console.log(`Deleting profile at: ${deleteUrl}`); // Log the URL for debugging
         
         const response = await apiFetch(deleteUrl, { method: "DELETE" });
@@ -61,6 +59,8 @@ async function deleteProfile(profileId) {
         }
     }
 }
+
+ 
 
 
 
