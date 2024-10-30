@@ -27,7 +27,7 @@ namespace PrimeBidAPI.Controllers
             // Verify password
             var passwordHash = HashPassword(model.Password, user.Salt);
             if (user.PasswordHash != passwordHash)
-                return Unauthorized(new { error = "Invalid Passsword." });
+                return Unauthorized(new { error = "Invalid Password." });
 
             // Create a session
             HttpContext.Session.SetString("UserEmail", user.Email);
@@ -40,6 +40,13 @@ namespace PrimeBidAPI.Controllers
 
             // Return success message
             return Ok(new { message = "Login successful" });
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return Ok(new { message = "Logout successful" });
         }
 
         private string HashPassword(string password, string salt)
