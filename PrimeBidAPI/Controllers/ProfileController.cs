@@ -115,7 +115,7 @@ namespace PrimeBidAPI.Controllers
         }
 
         // DELETE: api/profile/{id}
-        [HttpDelete("{id}")]
+        [HttpDelete("profiles/{id}")]
         public async Task<IActionResult> DeleteProfile(int id)
         {
             _logger.LogInformation("Deleting user profile with ID: {UserId}", id);
