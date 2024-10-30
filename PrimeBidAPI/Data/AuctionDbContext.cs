@@ -67,13 +67,9 @@ namespace PrimeBidAPI.Data
             modelBuilder.Entity<PaymentItemsModel>()
                 .HasOne(pi => pi.Item)
                 .WithMany(i => i.PaymentItems)
-                .HasForeignKey(pi => pi.ItemId);
-
-            modelBuilder.Entity<PaymentItemsModel>()
-                .HasOne<Item>()
-                .WithMany(i => i.PaymentItems)
                 .HasForeignKey(pi => pi.ItemId)
                 .OnDelete(DeleteBehavior.Cascade); // Enables cascade delete
         }
+
     }
 }

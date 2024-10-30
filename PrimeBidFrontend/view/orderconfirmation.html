@@ -67,21 +67,22 @@
     </div>
 
     <script>
+        let itemName, bidAmount, itemImage; // Declare variables to store item details
+
         function populateOrderDetails() {
             const urlParams = new URLSearchParams(window.location.search);
-            const itemName = urlParams.get('itemName');
-            const bidAmount = urlParams.get('bidAmount');
-            const itemImage = urlParams.get('itemImage');
+            itemName = urlParams.get('itemName'); // Capture item name
+            bidAmount = urlParams.get('bidAmount'); // Capture bid amount
+            itemImage = urlParams.get('itemImage'); // Capture item image
             const contactName = urlParams.get('contactName');
             const mobile = urlParams.get('mobile');
             const address = urlParams.get('address');
             const zipAddress = urlParams.get('zipAddress');
-            const paymentId = urlParams.get('paymentId'); // Get paymentId from URL
-    
+
             // Populate item details
             const itemsContainer = document.querySelector('.items');
             itemsContainer.innerHTML = ''; // Clear any existing items
-    
+
             const itemElement = document.createElement('div');
             itemElement.classList.add('item', 'flex', 'items-center', 'bg-white', 'bg-opacity-10', 'rounded-lg', 'p-4', 'shadow-md');
             itemElement.innerHTML = `
@@ -94,10 +95,10 @@
                 </div>
             `;
             itemsContainer.appendChild(itemElement);
-    
+
             // Set the total price
             document.querySelector('.total-price').textContent = `Total: US $${bidAmount}`;
-    
+
             // Populate user details
             document.getElementById('contact-name').value = contactName;
             document.getElementById('mobile-number').value = mobile;
@@ -105,31 +106,19 @@
             document.getElementById('zip-address').value = zipAddress;
 
             // Set the payment ID
-            document.getElementById('payment-id').value = paymentId; // Set payment ID for the form
-            sessionStorage.setItem('paymentId', paymentId); // Save paymentId to session storage
+            document.getElementById('payment-id').value = 1; // Set payment ID to 1 by default
         }
-    
+
         // Handle form submission and redirect to payment page
         function handleFormSubmit(event) {
             event.preventDefault(); // Prevent default form submission
-    
-            // Gather user details from the form
-            const nonce = document.getElementById('nonce').value; // Get the nonce if needed
-            const contactName = document.getElementById('contact-name').value;
-            const mobile = document.getElementById('mobile-number').value;
-            const address = document.getElementById('address').value;
-            const zipAddress = document.getElementById('zip-address').value;
-            const paymentId = document.getElementById('payment-id').value; // Get the payment ID
-            
-            const urlParams = new URLSearchParams(window.location.search);
-            const itemName = urlParams.get('itemName');
-            const bidAmount = urlParams.get('bidAmount');
-            const itemImage = urlParams.get('itemImage');
-    
-            // Redirect to the payment page without including paymentId in the URL
-            window.location.href = 'payment.html'; // Replace with the correct path
+
+            const totalAmount = bidAmount; // Use bidAmount as the total amount
+
+            // Redirect to the payment page, passing relevant data
+            window.location.href = `payment.html?paymentId=1&totalAmount=${totalAmount}&itemName=${encodeURIComponent(itemName)}&bidAmount=${bidAmount}&itemImage=${encodeURIComponent(itemImage)}&contactName=${encodeURIComponent(document.getElementById('contact-name').value)}&mobile=${encodeURIComponent(document.getElementById('mobile-number').value)}&address=${encodeURIComponent(document.getElementById('address').value)}&zipAddress=${encodeURIComponent(document.getElementById('zip-address').value)}`;
         }
-    
+
         // Fetch order confirmation details when the page loads
         window.addEventListener("DOMContentLoaded", populateOrderDetails);
     

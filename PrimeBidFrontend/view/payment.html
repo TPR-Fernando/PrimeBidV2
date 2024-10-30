@@ -58,61 +58,67 @@
     var client_token; // Will be assigned later
     var form = document.querySelector('#payment-form');
 
-    // Initialize Braintree Drop-in UI
-    async function initializeBraintree() {
-        try {
-            const response = await fetch(`https://localhost:7217/api/paymentpage/1`); // Replace '1' with the actual paymentId
-            if (!response.ok) {
-                throw new Error('Failed to fetch payment details: ' + response.statusText);
+   // Initialize Braintree and fetch payment details on page load
+async function initializeBraintree() {
+    try {
+        // Get paymentId and totalAmount from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentId = urlParams.get('paymentId') || 1; // Default to 1 if not provided
+        const totalAmount = urlParams.get('totalAmount') || 0; // Default to 0 if not provided
+
+        const response = await fetch(`https://localhost:7217/api/paymentpage/${paymentId}`); // Use paymentId
+        if (!response.ok) {
+            throw new Error('Failed to fetch payment details: ' + response.statusText);
+        }
+        const data = await response.json();
+
+        // Set client token
+        client_token = data.clientToken;
+
+        // Populate payment details
+        document.getElementById('payment-id').value = data.payment.Id; // Set payment ID
+        document.getElementById('total-amount').value = totalAmount; // Set total amount
+        document.getElementById('total-price-value').textContent = `US $${parseFloat(totalAmount).toFixed(2)}`; // Set total price display
+
+        // Initialize Drop-in UI
+        braintree.dropin.create({
+            authorization: client_token,
+            container: '#bt-dropin'
+        }, function (createErr, instance) {
+            if (createErr) {
+                console.error("Braintree Drop-in UI Error: ", createErr);
+                return;
             }
-            const data = await response.json();
 
-            // Set client token
-            client_token = data.clientToken;
+            // Handle form submission
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
 
-            // Populate payment details
-            document.getElementById('payment-id').value = data.payment.Id; // Set payment ID
-            document.getElementById('total-amount').value = data.payment.TotalAmount; // Set total amount
-            document.getElementById('total-price-value').textContent = `US $${parseFloat(data.payment.TotalAmount).toFixed(2)}`; // Set total price display
+                // Request the payment method nonce from Braintree
+                instance.requestPaymentMethod(function (err, payload) {
+                    if (err) {
+                        console.error("Error requesting payment method: ", err);
+                        return;
+                    }
 
-            // Initialize Drop-in UI
-            braintree.dropin.create({
-                authorization: client_token,
-                container: '#bt-dropin'
-            }, function (createErr, instance) {
-                if (createErr) {
-                    console.error("Braintree Drop-in UI Error: ", createErr);
-                    return;
-                }
+                    // Add the nonce to the form
+                    var nonceInput = document.createElement('input');
+                    nonceInput.setAttribute('type', 'hidden');
+                    nonceInput.setAttribute('name', 'Nonce');
+                    nonceInput.setAttribute('value', payload.nonce);
+                    form.appendChild(nonceInput);
 
-                // Handle form submission
-                form.addEventListener('submit', function (event) {
-                    event.preventDefault(); // Prevent default form submission
-
-                    // Request the payment method nonce from Braintree
-                    instance.requestPaymentMethod(function (err, payload) {
-                        if (err) {
-                            console.error("Error requesting payment method: ", err);
-                            return;
-                        }
-
-                        // Add the nonce to the form
-                        var nonceInput = document.createElement('input');
-                        nonceInput.setAttribute('type', 'hidden');
-                        nonceInput.setAttribute('name', 'Nonce');
-                        nonceInput.setAttribute('value', payload.nonce);
-                        form.appendChild(nonceInput);
-
-                        // Now call the function to submit the payment
-                        submitPayment();
-                    });
+                    // Now call the function to submit the payment
+                    submitPayment();
                 });
             });
-        } catch (error) {
-            console.error("Error initializing Braintree: ", error);
-            alert("There was an issue initializing the payment. Please check the console for details.");
-        }
+        });
+    } catch (error) {
+        console.error("Error initializing Braintree: ", error);
+        alert("There was an issue initializing the payment. Please check the console for details.");
     }
+}
+
 
     // Function to submit payment details to the server
     async function submitPayment() {
