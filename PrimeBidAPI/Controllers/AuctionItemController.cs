@@ -22,28 +22,20 @@ namespace PrimeBidAPI.Controllers
             _logger = logger;
         }
 
-
-
         [HttpGet("{id}")]
         public async Task<ActionResult<AuctionItem>> GetAuctionItem(int id)
         {
             try
             {
-                // Attempt to find the auction item by ID
                 var item = await _context.AuctionItems.FindAsync(id);
-
-                // If the item is not found, return a 404 Not Found response
                 if (item == null)
                 {
                     return NotFound();
                 }
-
-                // If the item is found, return it with a 200 OK response
                 return Ok(item);
             }
-            catch (Exception ex) // Capture the exception to log it
+            catch (Exception ex)
             {
-                // Log any unexpected exceptions
                 _logger.LogError(ex, "An error occurred while fetching the auction item with ID {Id}", id);
                 return StatusCode(500, "Internal server error");
             }
@@ -60,18 +52,15 @@ namespace PrimeBidAPI.Controllers
 
             try
             {
-                // Save the auction item to the database
                 _context.AuctionItems.Add(model.AuctionItem);
                 await _context.SaveChangesAsync();
 
-                // Directory for saving files
                 var resourceDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
                 if (!Directory.Exists(resourceDirectory))
                 {
-                    Directory.CreateDirectory(resourceDirectory); // Create the directory if missing
+                    Directory.CreateDirectory(resourceDirectory);
                 }
 
-                // Track whether the image URL was set
                 bool isImageUrlSet = false;
 
                 foreach (var file in model.Files)
@@ -85,8 +74,6 @@ namespace PrimeBidAPI.Controllers
                         }
 
                         var imageUrl = $"https://localhost:7217/Resources/{file.FileName}";
-
-                        // Set the ImageUrl only if not already set (for the first image)
                         if (!isImageUrlSet)
                         {
                             model.AuctionItem.ImageUrl = imageUrl;
@@ -95,7 +82,6 @@ namespace PrimeBidAPI.Controllers
                     }
                 }
 
-                // Update the auction item with the ImageUrl
                 _context.AuctionItems.Update(model.AuctionItem);
                 await _context.SaveChangesAsync();
 
@@ -111,10 +97,71 @@ namespace PrimeBidAPI.Controllers
                 });
             }
         }
+
+        [HttpGet]
+        [Route("GetAllAuctionItems")]
+        public async Task<ActionResult<IEnumerable<AuctionItem>>> GetAllAuctionItems()
+        {
+            try
+            {
+                var items = await _service.GetAllAuctionItems();
+                return Ok(items);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching all auction items.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPost("Approve/{id}")]
+        public async Task<IActionResult> ApproveAuctionItem(int id)
+        {
+            try
+            {
+                var itemDto = await _service.ApproveAuctionItemAsync(id);
+                if (itemDto == null)
+                {
+                    // More specific messages can help identify the issue
+                    var auctionItemExists = await _service.CheckAuctionItemExists(id); // Implement this check in your service
+                    if (!auctionItemExists)
+                    {
+                        return NotFound(new { message = "Auction item not found." });
+                    }
+                    return BadRequest(new { message = "Approval failed due to an unknown reason." });
+                }
+                return Ok(new { message = "Auction item approved and moved to Items table successfully.", item = itemDto });
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Database error occurred while approving the auction item with ID {Id}", id);
+                return StatusCode(500, new { message = "Database error occurred while processing your request." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while approving the auction item with ID {Id}", id);
+                return StatusCode(500, new { message = "Internal server error." });
+            }
+        }
+
+        [HttpDelete("Reject/{id}")]
+        public async Task<IActionResult> RejectAuctionItem(int id)
+        {
+            try
+            {
+                var isSuccess = await _service.RejectAuctionItemAsync(id);
+                if (!isSuccess)
+                {
+                    return NotFound(new { message = "Auction item not found for rejection." });
+                }
+                return Ok(new { message = "Auction item rejected successfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while rejecting the auction item with ID {Id}", id);
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
     }
 }
-
-
-
-
-

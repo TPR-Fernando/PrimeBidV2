@@ -34,12 +34,14 @@ namespace PrimeBidAPI.Controllers
                 FullName = model.FullName,
                 Email = model.Email,
                 PasswordHash = passwordHash,
-                Salt = salt,
+                Salt = salt
             };
 
             // Save to the database
             _context.Profiles.Add(newUser);
             _context.SaveChanges();
+
+            HttpContext.Session.SetInt32("UserId", newUser.Id);
 
             return Ok(new { message = "Registration successful." });
         }

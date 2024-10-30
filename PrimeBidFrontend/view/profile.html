@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Page</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -35,151 +36,146 @@
         }
     </script>
 </head>
+
 <body class="bg-primary text-textWhite min-h-screen">
-<div class="flex flex-col md:flex-row min-h-screen">
-    <div class="backdrop-blur-md bg-frosted md:w-64 p-6 space-y-6 shadow-xl rounded-lg m-4 transition-transform duration-500 transform hover:scale-105">
-        <h2 class="text-3xl font-bold text-center">Menu</h2>
-        <ul class="space-y-4">
-            <li class="transform hover:scale-110 transition-transform duration-300">
-                <a href="profile.html" class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Profile</a>
-            </li>
-            <li class="transform hover:scale-110 transition-transform duration-300">
-                <a href="bidhistory.html" class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Bid History</a>
-            </li>
-            <li class="transform hover:scale-110 transition-transform duration-300">
-                <a href="watchlist.html" class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Watchlist</a>
-            </li>
-        </ul>
-        <button class="w-full bg-gold text-black py-3 rounded-lg hover:bg-gold-500 transition-colors duration-200 shadow-lg">Logout</button>
-    </div>
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <div
+            class="backdrop-blur-md bg-frosted md:w-64 p-6 space-y-6 shadow-xl rounded-lg m-4 transition-transform duration-500 transform hover:scale-105">
+            <h2 class="text-3xl font-bold text-center">Menu</h2>
+            <ul class="space-y-4">
+                <li class="transform hover:scale-110 transition-transform duration-300">
+                    <a href="profile.html"
+                        class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Profile</a>
+                </li>
+                <li class="transform hover:scale-110 transition-transform duration-300">
+                    <a href="bidhistory.html"
+                        class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Bid
+                        History</a>
+                </li>
+                <li class="transform hover:scale-110 transition-transform duration-300">
+                    <a href="watchlist.html"
+                        class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Watchlist</a>
+                </li>
+            </ul>
+            <button id="logoutBtn"
+                class="w-full bg-gold text-black py-3 rounded-lg hover:bg-yellow-500 transition-colors duration-200 shadow-lg">Logout</button>
+        </div>
 
-    <div class="flex-grow p-6 animate-fade-in-up">
-        <h3 class="text-4xl font-bold mb-6">Profile</h3>
+        <div class="flex-grow p-6 animate-fade-in-up">
+            <h3 class="text-4xl font-bold mb-6">Profile</h3>
 
-        <div class="profile-header flex items-center space-x-6 mb-8">
-            <div class="rounded-full overflow-hidden shadow-lg">
-                <img src="https://nwestco.com/wp-content/uploads/2016/08/13.jpg" alt="Profile Picture" class="w-24 h-24 object-cover">
+            <div class="profile-header flex items-center space-x-6 mb-8">
+                <div class="rounded-full overflow-hidden shadow-lg">
+                    <img src="https://nwestco.com/wp-content/uploads/2016/08/13.jpg" alt="Profile Picture"
+                        class="w-24 h-24 object-cover">
+                </div>
+                <div>
+                    <button
+                        class="bg-gold text-black py-2 px-4 rounded-lg shadow-lg hover:bg-yellow-500 transition-colors duration-200"
+                        id="editProfileBtn" onclick="toggleEdit()">Edit Profile</button>
+                </div>
             </div>
-            <div>
-                <button class="bg-gold text-black py-2 px-4 rounded-lg shadow-lg hover:bg-yellow-500 transition-colors duration-200" id="editProfileBtn" onclick="toggleEdit()">Edit Profile</button>
+
+            <div class="user-details backdrop-blur-md bg-frosted p-6 rounded-lg shadow-xl">
+                <h4 class="text-2xl font-semibold mb-4">Account Information</h4>
+
+                <form id="profile-form" class="space-y-4" onsubmit="saveChanges(event)">
+                    <div class="flex flex-col space-y-2">
+                        <label for="fullName" class="text-gray-300">Full Name:</label>
+                        <input type="text" id="profile-name" required
+                            class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite" disabled>
+                    </div>
+
+                    <div class="flex flex-col space-y-2">
+                        <label for="email" class="text-gray-300">Email:</label>
+                        <input type="email" id="profile-email" required
+                            class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite" disabled>
+                    </div>
+
+                    <div class="flex flex-col space-y-2">
+                        <label for="address" class="text-gray-300">Address:</label>
+                        <input type="text" id="profile-address" required
+                            class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite" disabled>
+                    </div>
+
+                    <div class="flex flex-col space-y-2">
+                        <label for="phone" class="text-gray-300">Phone Number:</label>
+                        <input type="text" id="profile-phone" required
+                            class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite" disabled>
+                    </div>
+
+                    <div class="flex space-x-4 mt-6">
+                        <button type="submit"
+                            class="bg-gold text-black py-2 px-4 rounded-lg shadow-lg hover:bg-yellow-500 transition-colors duration-200"
+                            id="saveChangesBtn" style="display:none;">Save Changes</button>
+                        <button type="button"
+                            class="bg-red-600 py-2 px-4 rounded-lg shadow-lg hover:bg-red-700 transition-colors duration-200"
+                            id="cancelEditBtn" onclick="cancelEdit()" style="display:none;">Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <div class="user-details backdrop-blur-md bg-frosted p-6 rounded-lg shadow-xl">
-            <h4 class="text-2xl font-semibold mb-4">Account Information</h4>
+        <script>
+            async function getProfile() {
+                try {
+                    const response = await fetch('https://localhost:7217/api/profile', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-            <form id="profile-form" class="space-y-4" onsubmit="saveChanges(event)">
-                <div class="flex flex-col space-y-2">
-                    <label for="fullName" class="text-gray-300">Full Name:</label>
-                    <input type="text" id="profile-name" required class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite" disabled>
-                </div>
+                    if (!response.ok) {
+                        alert("Failed to load profile data");
+                        return;
+                    }
 
-                <div class="flex flex-col space-y-2">
-                    <label for="email" class="text-gray-300">Email:</label>
-                    <input type="email" id="profile-email" required class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite" disabled>
-                </div>
+                    const profile = await response.json();
 
-                <div class="flex flex-col space-y-2">
-                    <label for="address" class="text-gray-300">Shipping Address:</label>
-                    <input type="text" id="profile-address" required class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite" disabled>
-                </div>
-
-                <div class="flex flex-col space-y-2">
-                    <label for="phoneNumber" class="text-gray-300">Phone Number:</label>
-                    <input type="text" id="profile-phone" required class="bg-transparent border border-gray-300 rounded-lg p-2 text-textWhite" disabled>
-                </div>
-
-                <div class="flex space-x-4 mt-6">
-                    <button type="submit" class="bg-gold text-black py-2 px-4 rounded-lg shadow-lg hover:bg-yellow-500 transition-colors duration-200" id="saveChangesBtn" style="display:none;">Save Changes</button>
-                    <button type="button" class="bg-red-600 py-2 px-4 rounded-lg shadow-lg hover:bg-red-700 transition-colors duration-200" id="cancelEditBtn" onclick="cancelEdit()" style="display:none;">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script>
-async function getProfile(userId) {
-    try {
-        const response = await fetch(`https://localhost:7217/api/profile/${userId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
+                    if (profile) {
+                        document.getElementById("profile-name").value = profile.fullName;
+                        document.getElementById("profile-email").value = profile.email;
+                    } else {
+                        alert("Profile not found");
+                    }
+                } catch (error) {
+                    console.error('Error fetching profile:', error);
+                }
             }
-        });
-        
-        const profile = await response.json();
-        
-        if (profile) {
-            document.getElementById("profile-name").value = profile.fullName;
-            document.getElementById("profile-email").value = profile.email;
-            document.getElementById("profile-address").value = profile.address;
-            document.getElementById("profile-phone").value = profile.phoneNumber;
-        } else {
-            alert("Profile not found");
-        }
-    } catch (error) {
-        console.error('Error fetching profile:', error);
-    }
-}
 
-// Toggle edit mode
-function toggleEdit() {
-    document.getElementById("profile-name").disabled = false;
-    document.getElementById("profile-email").disabled = false;
-    document.getElementById("profile-address").disabled = false;
-    document.getElementById("profile-phone").disabled = false;
-    document.getElementById("editProfileBtn").style.display = "none";
-    document.getElementById("saveChangesBtn").style.display = "block";
-    document.getElementById("cancelEditBtn").style.display = "block";
-}
+            // Enable form fields for editing
+            function toggleEdit() {
+                document.getElementById("profile-name").disabled = false;
+                document.getElementById("profile-email").disabled = false;
+                document.getElementById("editProfileBtn").style.display = "none";
+                document.getElementById("saveChangesBtn").style.display = "block";
+                document.getElementById("cancelEditBtn").style.display = "block";
+            }
 
-// Save changes
-function saveChanges(event) {
-    event.preventDefault();
-    const updatedProfile = {
-        fullName: document.getElementById("profile-name").value,
-        email: document.getElementById("profile-email").value,
-        address: document.getElementById("profile-address").value,
-        phoneNumber: document.getElementById("profile-phone").value
-    };
+            // Cancel edit mode
+            function cancelEdit() {
+                document.getElementById("profile-name").disabled = true;
+                document.getElementById("profile-email").disabled = true;
+                document.getElementById("editProfileBtn").style.display = "block";
+                document.getElementById("saveChangesBtn").style.display = "none";
+                document.getElementById("cancelEditBtn").style.display = "none";
+            }
 
-    fetch(`https://localhost:7217/api/profile/1`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedProfile)
-    }).then(response => {
-        if (response.ok) {
-            alert("Profile updated successfully!");
-            cancelEdit();
-        } else {
-            alert("Failed to update profile.");
-        }
-    }).catch(error => {
-        console.error("Error saving profile:", error);
-    });
-}
+            // Handle logout
+            function handleLogout() {
+                fetch('https://localhost:7217/api/userlogin/logout', {
+                    method: 'POST',
+                }).then(() => {
+                    window.location.href = "Login.html";
+                }).catch(error => {
+                    console.error('Logout failed:', error);
+                });
+            }
 
-// Cancel edit mode
-function cancelEdit() {
-    document.getElementById("profile-name").disabled = true;
-    document.getElementById("profile-email").disabled = true;
-    document.getElementById("profile-address").disabled = true;
-    document.getElementById("profile-phone").disabled = true;
-    document.getElementById("editProfileBtn").style.display = "block";
-    document.getElementById("saveChangesBtn").style.display = "none";
-    document.getElementById("cancelEditBtn").style.display = "none";
-}
-
-// Function to handle logout
-function handleLogout() {
-    window.location.href = "LoginPage.html";
-}
-
-// Attach the event listener to the logout button
-document.querySelector("button.bg-red-600").addEventListener("click", handleLogout);
-getProfile(1);
-</script>
-
+            window.onload = getProfile;
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+        </script>
 </body>
+
 </html>

@@ -45,13 +45,15 @@ namespace PrimeBidAPI.Controllers
 
             var userId = HttpContext.Session.GetInt32("UserId").Value;
             var profile = await _profileService.GetProfileAsync(userId);
+
             if (profile == null)
             {
                 _logger.LogWarning($"Profile not found for userId: {userId}");
                 return NotFound(new { message = "Profile not found" });
             }
 
-            return Ok(profile);
+            // Only return essential fields
+            return Ok(new { fullName = profile.FullName, email = profile.Email });
         }
 
         [HttpGet("bid-history")]

@@ -14,7 +14,7 @@ namespace PrimeBidAPI.Models
         public decimal TotalAmount { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now; // Default value
 
-        public virtual ICollection<PaymentItemsModel> PaymentItems { get; set; } = new List<PaymentItemsModel>();
+        //public virtual ICollection<PaymentItemsModel> PaymentItems { get; set; } = new List<PaymentItemsModel>();
 
         // Add this property back
         public virtual ICollection<Item> Items { get; set; } = new List<Item>();

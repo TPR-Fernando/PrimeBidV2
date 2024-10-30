@@ -21,41 +21,40 @@ namespace PrimeBidAPI.Controllers
         }
 
         // GET: api/paymentpage/{paymentId}
-        [HttpGet("{paymentId}")]
-        public async Task<IActionResult> GetPaymentPage(int paymentId)
-        {
-            var payment = await _context.Payments
-                .Where(p => p.Id == paymentId)
-                .Select(p => new PaymentPurchaseVM
-                {
-                    Id = p.Id,
-                    ContactName = p.ContactName,
-                    Mobile = p.Mobile,
-                    Address = p.Address,
-                    ZipAddress = p.ZipAddress,
-                    TotalAmount = p.TotalAmount,
-                    Items = p.PaymentItems.Select(i => new Item
-                    {
-                        Id = i.Item.Id, // Assuming you want the Item Id
-                        ItemName = i.Item.ItemName,
-                        ItemImage = i.Item.ItemImage,
-                        Price = i.Item.Price,
-                        Quantity = i.Item.Quantity
-                    }).ToList(),
-                    Nonce = "" // You can set a default or empty value here
-                })
-                .FirstOrDefaultAsync();
+        //[HttpGet("{paymentId}")]
+        //public async Task<IActionResult> GetPaymentPage(int paymentId)
+        //{
+        //    var payment = await _context.Payments
+        //        .Where(p => p.Id == paymentId)
+        //        .Select(p => new PaymentPurchaseVM
+        //        {
+        //            Id = p.Id,
+        //            ContactName = p.ContactName,
+        //            Mobile = p.Mobile,
+        //            Address = p.Address,
+        //            ZipAddress = p.ZipAddress,
+        //            TotalAmount = p.TotalAmount,
+        //            Items = p.PaymentItems.Select(i => new Item
+        //            {
+        //                Id = i.Item.Id, // Assuming you want the Item Id
+        //                ItemName = i.Item.ItemName,
+        //                ItemImage = i.Item.ItemImage,
+        //                Price = i.Item.Price,
+        //            }).ToList(),
+        //            Nonce = "" // You can set a default or empty value here
+        //        })
+        //        .FirstOrDefaultAsync();
 
-            if (payment == null)
-            {
-                return NotFound();
-            }
+        //    if (payment == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var gateway = _braintreeService.GetGateway();
-            var clientToken = gateway.ClientToken.Generate();
+        //    var gateway = _braintreeService.GetGateway();
+        //    var clientToken = gateway.ClientToken.Generate();
 
-            return Ok(new { payment, clientToken });
-        }
+        //    return Ok(new { payment, clientToken });
+        //}
 
         // POST: api/paymentpage
         [HttpPost]

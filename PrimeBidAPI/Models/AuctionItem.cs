@@ -19,7 +19,7 @@ namespace PrimeBidAPI.Models
         [Range(1, double.MaxValue, ErrorMessage = "Starting bid must be a positive number.")]
         public decimal StartingBid { get; set; }
         public DateTime AuctionEndDate { get; set; }
-        public string AdditionalTerms { get; set; }
+        public string? AdditionalTerms { get; set; }
 
         // Add this property to store the URL of the first uploaded image
         public string? ImageUrl { get; set; }

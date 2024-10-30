@@ -19,7 +19,6 @@
                 <li><a href="AdminUsers.html">Users</a></li>
                 <li><a href="AdminAuctions.html">Auction Management</a></li>
                 <li><a href="#" class="active">Auction Confirmation</a></li>
-             
             </ul>
         </div>
 
@@ -39,7 +38,7 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="auction-items-body">
                     <!-- Rows will be generated dynamically here -->
                 </tbody>
             </table>
@@ -55,7 +54,78 @@
         </div>
     </div>
 
-    
+    <script>
+        // Function to fetch and display all auction items
+        async function fetchAuctionItems() {
+            try {
+                const response = await fetch("https://localhost:7217/api/AuctionItem/GetAllAuctionItems");
+                if (response.ok) {
+                    const auctionItems = await response.json();
+                    displayAuctionItems(auctionItems);
+                } else {
+                    console.error("Failed to fetch auction items:", response.statusText);
+                    alert("Unable to fetch auction items.");
+                }
+            } catch (error) {
+                console.error("Error fetching auction items:", error);
+                alert("An error occurred while fetching auction items.");
+            }
+        }
+
+        // Function to display auction items in the HTML table
+        function displayAuctionItems(items) {
+            const tbody = document.getElementById("auction-items-body");
+            tbody.innerHTML = ""; // Clear any existing rows
+
+            items.forEach(item => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.productName}</td>
+                    <td><img src="${item.imageUrl}" alt="Item Image" width="50" height="50"></td>
+                    <td>${item.itemDescription}</td>
+                    <td>${item.category}</td>
+                    <td>$${item.startingBid.toFixed(2)}</td>
+                    <td>${new Date(item.auctionEndDate).toLocaleDateString()}</td>
+                    <td><button onclick="approveItem(${item.id})">Approve</button>
+                        <button onclick="RejectItem(${item.id})">Reject</button></td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // Function to handle item approval (placeholder for now)
+        function approveItem(itemId) {
+            alert(`Approve item with ID: ${itemId}`);
+        }
+
+        async function approveItem(itemId) {
+            try {
+                const response = await fetch(`https://localhost:7217/api/AuctionItem/ApproveAuctionItem/${itemId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    alert("Item approved successfully.");
+                    fetchAuctionItems(); // Refresh the list after approval
+                } else {
+                    const error = await response.json();
+                    alert(`Error approving item: ${error.message}`);
+                }
+            } catch (error) {
+                console.error("Error approving item:", error);
+                alert("An error occurred while approving the item.");
+            }
+        }
+
+        // Fetch auction items on page load
+        document.addEventListener("DOMContentLoaded", fetchAuctionItems);
+    </script>
 </body>
 
 </html>

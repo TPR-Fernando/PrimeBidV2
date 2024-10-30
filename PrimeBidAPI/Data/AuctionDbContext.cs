@@ -19,8 +19,6 @@ namespace PrimeBidAPI.Data
         // DbSets for PrimeBid context
         public DbSet<Item> Items { get; set; }
         public DbSet<PaymentModel> Payments { get; set; }
-        public DbSet<PaymentItemsModel> PaymentItems { get; set; }
-
         //Auction Item
         public DbSet<AuctionItem> AuctionItems { get; set; }
         //AuctionPic
@@ -53,22 +51,6 @@ namespace PrimeBidAPI.Data
             // Configure PrimeBidDbContext entities
             modelBuilder.Entity<Item>().ToTable("Items");
             modelBuilder.Entity<PaymentModel>().ToTable("Payments");
-            modelBuilder.Entity<PaymentItemsModel>().ToTable("PaymentItems");
-
-            // Configure PaymentItemsModel relationships
-            modelBuilder.Entity<PaymentItemsModel>()
-                .HasKey(pi => pi.Id);
-
-            modelBuilder.Entity<PaymentItemsModel>()
-                .HasOne(pi => pi.Payment)
-                .WithMany(p => p.PaymentItems)
-                .HasForeignKey(pi => pi.PaymentId);
-
-            modelBuilder.Entity<PaymentItemsModel>()
-                .HasOne(pi => pi.Item)
-                .WithMany(i => i.PaymentItems)
-                .HasForeignKey(pi => pi.ItemId)
-                .OnDelete(DeleteBehavior.Cascade); // Enables cascade delete
         }
 
     }
