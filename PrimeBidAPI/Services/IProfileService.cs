@@ -13,5 +13,7 @@ namespace PrimeBidAPI.Services
         //Task<bool> ValidateSessionKeyAsync(int userId, string sessionKey);
         //I also added this method just in case...cus its not here? but in the ProfileService class
         //Task<bool> DeleteProfileAsync(int userId);
+        Task<List<Profile>> GetAllProfilesAsync();  // Add async version
+        Task DeleteProfileAsync(int userId);        // Add async version
     }
 }
