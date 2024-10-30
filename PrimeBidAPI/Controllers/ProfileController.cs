@@ -32,10 +32,18 @@ namespace PrimeBidAPI.Controllers
             _context = context;
         }
 
-        // GET: api/profile/{userId}
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetProfile(int userId)
+        private bool IsSessionValid()
         {
+            return HttpContext.Session.GetInt32("UserId") != null;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProfile()
+        {
+            if (!IsSessionValid())
+                return Unauthorized(new { error = "Session expired. Please login again." });
+
+            var userId = HttpContext.Session.GetInt32("UserId").Value;
             var profile = await _profileService.GetProfileAsync(userId);
             if (profile == null)
             {
@@ -43,54 +51,55 @@ namespace PrimeBidAPI.Controllers
                 return NotFound(new { message = "Profile not found" });
             }
 
-            return Ok(profile); // Return profile data as JSON
+            return Ok(profile);
         }
 
-        // GET: api/profile/{userId}/bid-history
-        [HttpGet("{userId}/bid-history")]
-        public async Task<IActionResult> GetBidHistory(int userId)
+        [HttpGet("bid-history")]
+        public async Task<IActionResult> GetBidHistory()
         {
+            if (!IsSessionValid())
+                return Unauthorized(new { error = "Session expired. Please login again." });
+
+            var userId = HttpContext.Session.GetInt32("UserId").Value;
             var bidHistory = await _bidHistoryService.GetBidHistoryAsync(userId);
-            if (bidHistory == null || !bidHistory.Any()) // Check for empty list
+            if (bidHistory == null || !bidHistory.Any())
             {
-                _logger.LogInformation($"Bid history not found or empty for userId: {userId}");
-                return Ok(new { message = "No bid history found", bidHistory = new List<BidHistory>() });
+                _logger.LogInformation($"No bid history for userId: {userId}");
+                return Ok(new { message = "No bid history found" });
             }
 
-            return Ok(bidHistory); // Return bid history data as JSON
+            return Ok(bidHistory);
         }
 
-        // GET: api/profile/{userId}/watchlist
-        [HttpGet("{userId}/watchlist")]
-        public async Task<IActionResult> GetWatchlist(int userId)
+        [HttpGet("watchlist")]
+        public async Task<IActionResult> GetWatchlist()
         {
+            if (!IsSessionValid())
+                return Unauthorized(new { error = "Session expired. Please login again." });
+
+            var userId = HttpContext.Session.GetInt32("UserId").Value;
             var watchlist = await _watchlistService.GetWatchlistAsync(userId);
-            if (watchlist == null || !watchlist.Any()) // Check for empty list
+            if (watchlist == null || !watchlist.Any())
             {
-                _logger.LogInformation($"Watchlist not found or empty for userId: {userId}");
-                return Ok(new { message = "No watchlist items found", watchlist = new List<WatchlistModel>() });
+                _logger.LogInformation($"No watchlist items for userId: {userId}");
+                return Ok(new { message = "No watchlist items found" });
             }
 
-            return Ok(watchlist); // Return watchlist data as JSON
+            return Ok(watchlist);
         }
 
-        // PUT: api/profile/{userId}
-        [HttpPut("{userId}")]
-        public async Task<IActionResult> EditProfile(int userId, [FromBody] Profile profile)
+        [HttpPut]
+        public async Task<IActionResult> EditProfile([FromBody] Profile profile)
         {
-            if (profile == null)
-            {
-                return BadRequest(new { message = "Invalid profile data" });
-            }
+            if (!IsSessionValid())
+                return Unauthorized(new { error = "Session expired. Please login again." });
 
-            // Validate Profile object (add any specific validation you need)
-            if (string.IsNullOrEmpty(profile.FullName) || string.IsNullOrEmpty(profile.Email)) // Example validation
-            {
-                return BadRequest(new { message = "Name and email cannot be empty" });
-            }
+            var userId = HttpContext.Session.GetInt32("UserId").Value;
+
+            if (profile == null || string.IsNullOrEmpty(profile.FullName) || string.IsNullOrEmpty(profile.Email))
+                return BadRequest(new { message = "Invalid profile data" });
 
             var updated = await _profileService.UpdateProfileAsync(userId, profile);
-
             if (!updated)
             {
                 _logger.LogError($"Failed to update profile for userId: {userId}");
@@ -100,40 +109,45 @@ namespace PrimeBidAPI.Controllers
             return Ok(new { message = "Profile updated successfully" });
         }
 
-        // GET: api/profile/profiles
         [HttpGet("profiles")]
-        public ActionResult<List<Profile>> GetAllProfiles()
+        public async Task<IActionResult> GetAllProfiles()
         {
-            var profiles = _profileService.GetAllProfiles().ToList(); // Call the sync method
+            var profiles = await _profileService.GetAllProfilesAsync();
+            if (!profiles.Any())
+                return NotFound(new { message = "No profiles found" });
 
-            if (profiles == null || !profiles.Any())
-            {
-                return NotFound(); // 404 if no profiles found
-            }
-
-            return Ok(profiles); // 200 with the list of profiles
+            return Ok(profiles);
         }
 
-        // DELETE: api/profile/{id}
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProfile(int id)
+        // DELETE: api/profile/delete
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteProfile()
         {
-            _logger.LogInformation("Deleting user profile with ID: {UserId}", id);
+            // Retrieve the UserId from the session
+            var sessionUserId = HttpContext.Session.GetInt32("UserId");
+
+            // Check if the session is valid
+            if (sessionUserId == null)
+                return Unauthorized(new { error = "Session has expired. Please log in again." });
 
             // SQL query to delete the profile
-            var sqlQuery = "DELETE FROM [dbo].[Profiles] WHERE Id = @UserId"; // Ensure table name matches
+            var sqlQuery = "DELETE FROM [dbo].[Profiles] WHERE Id = @UserId";
 
             // Execute the delete command
-            var affectedRows = await _context.Database.ExecuteSqlRawAsync(sqlQuery, new SqlParameter("@UserId", id));
+            var affectedRows = await _context.Database.ExecuteSqlRawAsync(sqlQuery, new SqlParameter("@UserId", sessionUserId.Value));
 
             if (affectedRows == 0)
             {
-                _logger.LogWarning("User profile with ID: {UserId} not found.", id);
+                _logger.LogWarning("Failed to delete profile for userId: {UserId}", sessionUserId.Value);
                 return NotFound(new { message = "User profile not found." });
             }
 
-            _logger.LogInformation("User profile with ID: {UserId} successfully deleted.", id);
-            return Ok(new { message = "User profile deleted successfully." });
+            // Clear the session
+            HttpContext.Session.Clear();
+
+            _logger.LogInformation("Profile for userId: {UserId} deleted successfully.", sessionUserId.Value);
+            return Ok(new { message = "Profile deleted successfully." });
         }
+
     }
 }
