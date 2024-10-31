@@ -43,12 +43,12 @@ namespace PrimeBidAPI.Controllers
             if (!IsSessionValid())
                 return Unauthorized(new { error = $"Session expired. Please login again." });
 
-            var userId = Instances.CurrentSession.GetInt32("UserId").Value;
-            var profile = await _profileService.GetProfileAsync(userId);
+            var ItemId = 1;
+            var profile = await _profileService.GetProfileAsync(ItemId);
 
             if (profile == null)
             {
-                _logger.LogWarning($"Profile not found for userId: {userId}");
+                _logger.LogWarning($"Profile not found for userId: {ItemId}");
                 return NotFound(new { message = "Profile not found" });
             }
 
@@ -76,19 +76,19 @@ namespace PrimeBidAPI.Controllers
         [HttpGet("watchlist")]
         public async Task<IActionResult> GetWatchlist()
         {
-            if (!IsSessionValid())
-                return Unauthorized(new { error = "Session expired. Please login again." });
 
-            var userId = HttpContext.Session.GetInt32("UserId").Value;
-            var watchlist = await _watchlistService.GetWatchlistAsync(userId);
+            var ItemId = 1;
+
+            var watchlist = await _watchlistService.GetWatchlistAsync(ItemId);
             if (watchlist == null || !watchlist.Any())
             {
-                _logger.LogInformation($"No watchlist items for userId: {userId}");
+                _logger.LogInformation($"No watchlist items for userId: {ItemId}");
                 return Ok(new { message = "No watchlist items found" });
             }
 
             return Ok(watchlist);
         }
+
 
         [HttpPut]
         public async Task<IActionResult> EditProfile([FromBody] Profile profile)

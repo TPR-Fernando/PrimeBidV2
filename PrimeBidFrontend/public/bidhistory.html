@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,81 +36,172 @@
         }
     </script>
 </head>
+
 <body class="bg-primary text-textWhite min-h-screen">
-<div class="flex flex-col md:flex-row min-h-screen">
-    <div class="backdrop-blur-md bg-frosted md:w-64 p-6 space-y-6 shadow-xl rounded-lg m-4 transition-transform duration-500 transform hover:scale-105">
-        <h2 class="text-3xl font-bold text-center">Menu</h2>
-        <ul class="space-y-4">
-            <li class="transform hover:scale-110 transition-transform duration-300">
-                <a href="profile.html" class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Profile</a>
-            </li>
-            <li class="transform hover:scale-110 transition-transform duration-300">
-                <a href="bidhistory.html" class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Bid History</a>
-            </li>
-            <li class="transform hover:scale-110 transition-transform duration-300">
-                <a href="watchlist.html" class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Watchlist</a>
-            </li>
-        </ul>
-        <button class="w-full bg-gold text-black py-3 rounded-lg hover:bg-gold-500 transition-colors duration-200 shadow-lg">Logout</button>
-    </div>
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <div
+            class="backdrop-blur-md bg-frosted md:w-64 p-6 space-y-6 shadow-xl rounded-lg m-4 transition-transform duration-500 transform hover:scale-105">
+            <h2 class="text-3xl font-bold text-center">Menu</h2>
+            <ul class="space-y-4">
+                <li class="transform hover:scale-110 transition-transform duration-300">
+                    <a href="profile.html"
+                        class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Profile</a>
+                </li>
+                <li class="transform hover:scale-110 transition-transform duration-300">
+                    <a href="bidhistory.html"
+                        class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Bid
+                        History</a>
+                </li>
+                <li class="transform hover:scale-110 transition-transform duration-300">
+                    <a href="watchlist.html"
+                        class="block py-2 px-4 bg-frosted hover:bg-gold hover:text-primary rounded-lg transition-colors duration-200 shadow-lg">Watchlist</a>
+                </li>
+            </ul>
+            <button
+                class="w-full bg-gold text-black py-3 rounded-lg hover:bg-gold-500 transition-colors duration-200 shadow-lg">Logout</button>
+        </div>
 
-    <div class="flex-grow p-6 animate-fade-in-up">
-        <h3 class="text-4xl font-bold mb-6">Bid History</h3>
+        <div class="flex-grow p-6 animate-fade-in-up">
+            <h3 class="text-4xl font-bold mb-6">Bid History</h3>
 
-        <div class="bids-container backdrop-blur-md bg-frosted p-6 rounded-lg shadow-xl">
-            <h4 class="text-2xl font-semibold mb-4">Your Bids</h4>
-            <div id="bid-list" class="space-y-4">
-                <!-- Dynamically populated bid history will be injected here -->
+            <div class="bids-container backdrop-blur-md bg-frosted p-6 rounded-lg shadow-xl">
+                <h4 class="text-2xl font-semibold mb-4">Your Bids</h4>
+                <div id="bid-list" class="space-y-4">
+                    <!-- Dynamically populated bid history will be injected here -->
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-// Fetch and display bid history
-async function getBidHistory(userId) {
-    try {
-        const response = await fetch(`https://localhost:7217/api/profile/${userId}/bid-history`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const bidHistory = await response.json();
+    <script>
+        // Fetch and display bid history
+        async function getBidHistory(userId) {
+            try {
+                const response = await fetch(`https://localhost:7217/api/profile/${userId}/bid-history`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const bidHistory = await response.json();
 
-        const bidListElement = document.getElementById("bid-list");
-        bidListElement.innerHTML = "";
+                const bidListElement = document.getElementById("bid-list");
+                bidListElement.innerHTML = "";
 
-        if (bidHistory.length > 0) {
-            bidHistory.forEach(bid => {
-                const bidItem = `
+                if (bidHistory.length > 0) {
+                    bidHistory.forEach(bid => {
+                        const bidItem = `
                     <div class="bg-transparent border border-gray-300 rounded-lg p-4 shadow-lg text-textWhite">
                         <p><strong>Item:</strong> ${bid.itemName}</p>
                         <p><strong>Bid Amount:</strong> $${bid.bidAmount}</p>
                         <p><strong>Date:</strong> ${new Date(bid.bidDate).toLocaleDateString()}</p>
                     </div>`;
-                bidListElement.innerHTML += bidItem;
-            });
-        } else {
-            bidListElement.innerHTML = `<p>No bids found</p>`;
+                        bidListElement.innerHTML += bidItem;
+                    });
+                } else {
+                    bidListElement.innerHTML = `<p>No bids found</p>`;
+                }
+            } catch (error) {
+                console.error('Error fetching bid history:', error);
+                bidListElement.innerHTML = `<p>Error loading bid history. Please try again later.</p>`;
+            }
         }
-    } catch (error) {
-        console.error('Error fetching bid history:', error);
-        bidListElement.innerHTML = `<p>Error loading bid history. Please try again later.</p>`;
-    }
-}
 
-// Function to handle logout
-function handleLogout() {
-    // Redirect to the login page
-    window.location.href = "LoginPage.html";
-}
+        async function getBidHistoryByItemId(itemId = 1) {
+            // Use a default value of 1 for itemId to make it static
+            const bidListElement = document.getElementById("bid-list");
+            bidListElement.innerHTML = "<p>Loading...</p>";
 
-// Attach the event listener to the logout button
-document.querySelector("button.bg-red-600").addEventListener("click", handleLogout);
+            try {
+                const response = await fetch(`https://localhost:7217/api/BidHistory/item/${itemId}`);
 
-// Fetch bid history on page load
-getBidHistory(5); // Pass the actual userId dynamically if needed
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
-</script>
+                const bidHistory = await response.json();
+                bidListElement.innerHTML = ""; // Clear loading text
+
+                if (bidHistory.length > 0) {
+                    bidHistory.forEach(bid => {
+                        const bidItem = `
+                    <div class="bg-transparent border border-gray-300 rounded-lg p-4 shadow-lg text-textWhite">
+                        <p><strong>Item Name:</strong> ${bid.itemName}</p>
+                        <p><strong>Item ID:</strong> ${bid.itemId}</p>
+                        <p><strong>Bid Amount:</strong> $${bid.bidAmount.toFixed(2)}</p>
+                        <p><strong>Date:</strong> ${new Date(bid.bidDate).toLocaleDateString()}</p>
+                        <p><strong>Contact Name:</strong> ${bid.contactName}</p>
+                        <p><strong>Contact Number:</strong> ${bid.contactNumber}</p>
+                        <p><strong>Address:</strong> ${bid.address}</p>
+                    </div>`;
+                        bidListElement.innerHTML += bidItem;
+                    });
+                } else {
+                    bidListElement.innerHTML = "<p>No bids found for this item</p>";
+                }
+            } catch (error) {
+                console.error('Error fetching bid history by item ID:', error);
+                bidListElement.innerHTML = "<p>Error loading bid history. Please try again later.</p>";
+            }
+        }
+
+        // Call the function for immediate output on load, if desired
+        document.addEventListener('DOMContentLoaded', () => getBidHistoryByItemId(1));
+
+        async function getWatchlist() {
+            const watchlistElement = document.getElementById("watchlist");
+            watchlistElement.innerHTML = "<p>Loading watchlist...</p>";
+
+            try {
+                const response = await fetch('https://localhost:7217/api/BidHistory/watchlist', {
+                    credentials: 'include' // Ensures cookies/session are sent with the request
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const watchlistData = await response.json();
+                watchlistElement.innerHTML = ""; // Clear loading text
+
+                if (watchlistData.message) {
+                    // If no items are found, display the message
+                    watchlistElement.innerHTML = `<p>${watchlistData.message}</p>`;
+                } else if (watchlistData.length > 0) {
+                    // Render each watchlist item
+                    watchlistData.forEach(item => {
+                        const watchlistItem = `
+                    <div class="bg-transparent border border-gray-300 rounded-lg p-4 shadow-lg text-textWhite">
+                        <p><strong>Item Name:</strong> ${item.itemName}</p>
+                        <p><strong>Item ID:</strong> ${item.itemId}</p>
+                        <p><strong>Category:</strong> ${item.category}</p>
+                        <p><strong>Watch Date:</strong> ${new Date(item.watchDate).toLocaleDateString()}</p>
+                    </div>`;
+                        watchlistElement.innerHTML += watchlistItem;
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching watchlist:', error);
+                watchlistElement.innerHTML = "<p>Error loading watchlist. Please try again later.</p>";
+            }
+        }
+
+        // Call the function on page load to display watchlist immediately
+        document.addEventListener('DOMContentLoaded', getWatchlist);
+
+
+        // Function to handle logout
+        function handleLogout() {
+            // Redirect to the login page
+            window.location.href = "LoginPage.html";
+        }
+
+        // Attach the event listener to the logout button
+        document.querySelector("button.bg-red-600").addEventListener("click", handleLogout);
+
+        // Fetch bid history on page load
+        getBidHistory(5); // Pass the actual userId dynamically if needed
+
+    </script>
 
 </body>
+
 </html>

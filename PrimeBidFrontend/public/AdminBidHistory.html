@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Bid History</title>
+    <link rel="stylesheet" href="css/adminUsers.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="Resources/logo.png" alt="Prime Bid logo" class="logo">
+                <span class="brand-name">Prime BID</span>
+            </div>
+            <ul class="menu">
+                <li><a href="AdminUsers.html">Users</a></li>
+                <li><a href="AdminAuctions.html">Auction Management</a></li>
+                <li><a href="AdminAuctionConfirmation.html">Auction Confirmation</a></li>
+                <li><a href="#" class="active">Auction Bid History</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <h1>Auction Bid History</h1>
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>Bid ID</th>
+                        <th>User ID</th>
+                        <th>Item ID</th>
+                        <th>Item Name</th>
+                        <th>Bid Amount</th>
+                        <th>Bid Date</th>
+                        <th>Item Image</th>
+                        <th>Contact Name</th>
+                        <th>Contact Number</th>
+                        <th>Address</th>
+                        <th>Zip Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically generated here -->
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <a href="#">&laquo;</a>
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">&raquo;</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', fetchBidHistories);
+
+        async function fetchBidHistories() {
+            const tableBody = document.querySelector('.user-table tbody');
+            tableBody.innerHTML = '<tr><td colspan="11">Loading...</td></tr>';
+
+            try {
+                const response = await fetch('https://localhost:7217/api/BidHistory');
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                }
+
+                const bidHistories = await response.json();
+                displayBidHistories(bidHistories);
+            } catch (error) {
+                console.error('Failed to fetch bid histories:', error);
+                tableBody.innerHTML = '<tr><td colspan="11">Failed to load bid histories. Please try again later.</td></tr>';
+            }
+        }
+
+        function displayBidHistories(bidHistories) {
+            const tableBody = document.querySelector('.user-table tbody');
+            tableBody.innerHTML = ''; // Clear any existing rows
+
+            if (bidHistories.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="11">No bid histories found.</td></tr>';
+                return;
+            }
+
+            bidHistories.forEach(bid => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${bid.bidId}</td>
+                    <td>${bid.userId}</td>
+                    <td>${bid.itemId}</td>
+                    <td>${bid.itemName || 'N/A'}</td>
+                    <td>$${bid.bidAmount?.toFixed(2) || 'N/A'}</td>
+                    <td>${new Date(bid.bidDate).toLocaleDateString()}</td>
+                    <td><img src="${bid.itemImage || 'default-image.jpg'}" alt="Item Image" width="50" /></td>
+                    <td>${bid.contactName || 'N/A'}</td>
+                    <td>${bid.contactNumber || 'N/A'}</td>
+                    <td>${bid.address || 'N/A'}</td>
+                    <td>${bid.zipCode || 'N/A'}</td>
+        `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+    </script>
+</body>
+
+</html>

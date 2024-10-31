@@ -68,39 +68,44 @@
 
 <script>
 // Fetch and display watchlist
-async function getWatchlist(UserId) {
+async function getWatchlist() {
+    const watchlistElement = document.getElementById("watchlist");
+    watchlistElement.innerHTML = "<p>Loading watchlist...</p>";
+
     try {
-        const response = await fetch(`https://localhost:7217/api/profile/${UserId}/watchlist`);
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
-        }
-        
-        const watchlist = await response.json();
+        const response = await fetch('https://localhost:7217/api/Profile/watchlist', {
 
-        const watchlistElement = document.getElementById("watchlist");
-        watchlistElement.innerHTML = ""; // Clear any existing watchlist items
+        });
 
-        if (watchlist && watchlist.length > 0) {
-            watchlist.forEach(item => {
+
+        const watchlistData = await response.json();
+        watchlistElement.innerHTML = ""; // Clear loading text
+
+        if (watchlistData.message) {
+            // If no items are found, display the message
+            watchlistElement.innerHTML = `<p>${watchlistData.message}</p>`;
+        } else if (watchlistData.length > 0) {
+            // Render each watchlist item
+            watchlistData.forEach(item => {
                 const watchlistItem = `
                     <div class="bg-transparent border border-gray-300 rounded-lg p-4 shadow-lg text-textWhite">
-                        <p><strong>Item:</strong> ${item.itemName}</p>
-                        <p><strong>Current Price:</strong> $${item.currentPrice}</p>
-                        <p><strong>Auction End Date:</strong> ${new Date(item.endDate).toLocaleDateString()}</p>
-                        <img src="${item.itemImage}" alt="${item.itemName}" class="w-full h-32 object-cover rounded-md mb-2">
+                        <p><strong>Item Name:</strong> ${item.itemName}</p>
+                        <p><strong>Item ID:</strong> ${item.itemId}</p>
+                        <p><strong>Category:</strong> ${item.category}</p>
+                        <p><strong>Watch Date:</strong> ${new Date(item.watchDate).toLocaleDateString()}</p>
                     </div>`;
                 watchlistElement.innerHTML += watchlistItem;
             });
-        } else {
-            watchlistElement.innerHTML = `<p>Your watchlist is empty</p>`;
         }
     } catch (error) {
-        console.error('Error fetching watchlist:', error.message); // Log the error message
-        document.getElementById("watchlist").innerHTML = `<p>Error fetching watchlist: ${error.message}. Please try again later.</p>`;
+        console.error('Error fetching watchlist:', error);
+        watchlistElement.innerHTML = "<p>Error loading watchlist. Please try again later.</p>";
     }
 }
+
+// Call the function on page load to display watchlist immediately
+document.addEventListener('DOMContentLoaded', getWatchlist);
+
 
 // Function to handle logout
 function handleLogout() {
