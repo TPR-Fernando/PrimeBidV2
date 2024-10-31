@@ -43,17 +43,17 @@ namespace PrimeBidAPI.Controllers
             if (!IsSessionValid())
                 return Unauthorized(new { error = $"Session expired. Please login again." });
 
-            var ItemId = 1;
-            var profile = await _profileService.GetProfileAsync(ItemId);
+            var userId = Instances.CurrentSession.GetInt32("UserId").Value;
+            var profile = await _profileService.GetProfileAsync(userId);
 
             if (profile == null)
             {
-                _logger.LogWarning($"Profile not found for userId: {ItemId}");
+                _logger.LogWarning($"Profile not found for userId: {userId}");
                 return NotFound(new { message = "Profile not found" });
             }
 
             // Only return essential fields
-            return Ok(new { fullName = profile.FullName, email = profile.Email, address =profile.Address, phone = profile.PhoneNumber });
+            return Ok(new { fullName = profile.FullName, email = profile.Email, address = profile.Address, phone = profile.PhoneNumber });
         }
 
         [HttpGet("bid-history")]
@@ -77,12 +77,15 @@ namespace PrimeBidAPI.Controllers
         public async Task<IActionResult> GetWatchlist()
         {
 
-            var ItemId = 1;
+            if (!IsSessionValid())
+                return Unauthorized(new { error = "Session expired. Please login again." });
 
-            var watchlist = await _watchlistService.GetWatchlistAsync(ItemId);
+            var userId = HttpContext.Session.GetInt32("UserId").Value;
+
+            var watchlist = await _watchlistService.GetWatchlistAsync(userId);
             if (watchlist == null || !watchlist.Any())
             {
-                _logger.LogInformation($"No watchlist items for userId: {ItemId}");
+                _logger.LogInformation($"No watchlist items for userId: {userId}");
                 return Ok(new { message = "No watchlist items found" });
             }
 
