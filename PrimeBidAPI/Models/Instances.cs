@@ -12,6 +12,6 @@
     public class Instances
     {
         internal static ISession CurrentSession { get; set; }
-        internal static UserZLogged CurrentUser { get; set; }
+        internal static UserZLogged CurrentUser { get; set; } = new UserZLogged();
     }
 }

@@ -8,6 +8,6 @@ namespace PrimeBidAPI.Models
         public string? Nonce { get; set; }
 
         // Hiding the base class member with 'new'
-        public new List<Item> Items { get; set; } = new List<Item>();
+        Item Items { get; set; } = new Item();
     }
 }

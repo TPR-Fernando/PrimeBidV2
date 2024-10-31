@@ -35,7 +35,7 @@ namespace PrimeBidAPI.Controllers
             //HttpContext.Session.SetString("UserId", user.Id.ToString()); this will store the ID as a string. Kept it just in case.
             HttpContext.Session.SetInt32("UserId", user.Id);
             Instances.CurrentSession = HttpContext.Session;
-
+            Instances.CurrentUser.Id = user.Id;
 
             // Redirect to the Home page
             //return RedirectToAction("Index", "Home");  This part is not necessary since JavaScript is already set up to Redirect the User. But i kept it just in case

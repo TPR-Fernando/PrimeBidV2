@@ -1,4 +1,5 @@
-﻿using Braintree;
+﻿using Azure.Core;
+using Braintree;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PrimeBidAPI.Data;
@@ -20,41 +21,35 @@ namespace PrimeBidAPI.Controllers
             _context = context;
         }
 
-        // GET: api/paymentpage/{paymentId}
-        //[HttpGet("{paymentId}")]
-        //public async Task<IActionResult> GetPaymentPage(int paymentId)
-        //{
-        //    var payment = await _context.Payments
-        //        .Where(p => p.Id == paymentId)
-        //        .Select(p => new PaymentPurchaseVM
-        //        {
-        //            Id = p.Id,
-        //            ContactName = p.ContactName,
-        //            Mobile = p.Mobile,
-        //            Address = p.Address,
-        //            ZipAddress = p.ZipAddress,
-        //            TotalAmount = p.TotalAmount,
-        //            Items = p.PaymentItems.Select(i => new Item
-        //            {
-        //                Id = i.Item.Id, // Assuming you want the Item Id
-        //                ItemName = i.Item.ItemName,
-        //                ItemImage = i.Item.ItemImage,
-        //                Price = i.Item.Price,
-        //            }).ToList(),
-        //            Nonce = "" // You can set a default or empty value here
-        //        })
-        //        .FirstOrDefaultAsync();
+        //GET: api/paymentpage/{paymentId
+        [HttpGet("{paymentId}")]
+        public async Task<IActionResult> GetPaymentPage(int paymentId)
+        {
+            var payment = await _context.Payments
+                .Where(p => p.Id == paymentId)
+                .Select(p => new PaymentPurchaseVM
+                {
+                    Id = p.Id,
+                    ContactName = p.ContactName,
+                    Mobile = p.Mobile,
+                    Address = p.Address,
+                    ZipAddress = p.ZipAddress,
+                    TotalAmount = p.TotalAmount,
+                    Items = p.Items,
+                    Nonce = "" // You can set a default or empty value here
+                })
+                .FirstOrDefaultAsync();
 
-        //    if (payment == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (payment == null)
+            {
+                return BadRequest("No Payment Recorded");
+            }
 
-        //    var gateway = _braintreeService.GetGateway();
-        //    var clientToken = gateway.ClientToken.Generate();
+            var gateway = _braintreeService.GetGateway();
+            var clientToken = gateway.ClientToken.Generate();
 
-        //    return Ok(new { payment, clientToken });
-        //}
+            return Ok(new { payment, clientToken });
+        }
 
         // POST: api/paymentpage
         [HttpPost]
@@ -88,5 +83,37 @@ namespace PrimeBidAPI.Controllers
                 return BadRequest(new { message = "Transaction failed: " + result.Message });
             }
         }
+
+        [HttpPost("SubmitPayment")]
+        public async Task<IActionResult> SubmitPayment([FromBody] PaymentRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest("Invalid payment data.");
+            }
+
+            var bidHistory = new BidHistory
+            {
+                UserId = Instances.CurrentUser.Id, // Replace with the actual user ID, if needed
+                ItemId = int.Parse(request.Id), // Assuming you have this value from the item
+                ItemName = request.ItemName,
+                BidAmount = request.BidAmount,
+                BidDate = DateTime.Now, // Or however you want to set this
+                ItemImage = request.ItemImage,
+                ContactName = request.ContactName,
+                ContactNumber = request.ContactNumber,
+                Address = request.Address,
+                ZipCode = request.ZipCode
+            };
+
+            _context.BidHistories.Add(bidHistory);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Payment processed successfully." });
+        }
+
     }
+
+
 }

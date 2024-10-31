@@ -1,153 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Methods</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/common.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#000000', // Black background
-                        accent: '#D2BC79', // New gold color for buttons
+                        primary: '#000000',
+                        accent: '#D2BC79',
                         textWhite: '#FFFFFF',
                     },
                 },
             },
         }
     </script>
-    <script src="https://js.braintreegateway.com/web/dropin/1.22.0/js/dropin.min.js"></script>
 </head>
+
 <body class="bg-primary text-textWhite flex flex-col items-center min-h-screen py-8">
 
-<div class="container max-w-3xl bg-primary rounded-lg shadow-lg p-6 mx-auto">
-    <div class="form-header flex items-center justify-between mb-6">
-        <button class="text-accent text-xl" onclick="window.history.back();">&larr;</button>
-        <h1 class="text-2xl font-semibold text-accent">Payment Methods</h1>
+    <div class="container max-w-3xl bg-primary rounded-lg shadow-lg p-6 mx-auto">
+        <div class="form-header flex items-center justify-between mb-6">
+            <a href="javascript:history.back()"
+                class="text-accent text-lg font-semibold hover:text-green-300 transition-colors">&#8592; Back</a>
+            <h1 class="text-2xl font-semibold text-accent">Payment Methods</h1>
+        </div>
+
+        <div class="flex flex-col items-center space-y-6">
+            <form id="payment-form" method="post" class="payment-form w-full">
+                <input type="hidden" id="payment-id" name="Id" />
+                <input type="hidden" id="total-amount" name="TotalAmount" />
+
+                <!-- Display item details -->
+                <div class="item-details bg-white bg-opacity-10 rounded-lg p-4 shadow-md mb-4">
+                    <img id="item-image" src="" alt="Item Image" class="w-20 h-20 object-cover rounded-lg mb-4" />
+                    <h3 id="item-name" class="text-xl font-semibold mb-2"></h3>
+                    <p id="bid-amount" class="text-lg font-semibold mb-4"></p>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="contact-name" class="block text-lg font-medium">Contact Information *</label>
+                    <input type="text" id="contact-name" name="ContactName"
+                        class="w-full p-2 rounded-lg bg-white bg-opacity-10 text-white focus:ring-2 focus:ring-accent focus:outline-none"
+                        placeholder="Your Name" required />
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="mobile-number" class="block text-lg font-medium">Mobile Number</label>
+                    <input type="text" id="mobile-number" name="Mobile"
+                        class="w-full p-2 rounded-lg bg-white bg-opacity-10 text-white focus:ring-2 focus:ring-accent focus:outline-none"
+                        placeholder="Your Mobile Number" />
+                </div>
+
+                <div class="form-group address-group grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <label for="address" class="block text-lg font-medium">Address</label>
+                    <input type="text" id="address" name="Address"
+                        class="w-full p-2 rounded-lg bg-white bg-opacity-10 text-white focus:ring-2 focus:ring-accent focus:outline-none"
+                        placeholder="Street, House/Apartment/unit" required />
+                    <label for="zip-address" class="block text-lg font-medium">Zip Code</label>
+                    <input type="text" id="zip-address" name="ZipAddress"
+                        class="w-full p-2 rounded-lg bg-white bg-opacity-10 text-white focus:ring-2 focus:ring-accent focus:outline-none"
+                        placeholder="Your Zip Code" />
+                </div>
+
+                <div class="total-price text-xl font-bold mb-4" id="total-price">
+                    Total: US $<span id="total-price-value">0.00</span>
+                </div>
+
+                <div class="pay-now-container flex justify-center mt-6 w-full">
+                    <button type="submit"
+                        class="pay-now-button w-full md:w-auto bg-accent text-black rounded-lg py-2 px-6 hover:bg-green-300 transition-colors">
+                        Place Order
+                    </button>
+                </div>
+            </form>
+
+            <div id="transaction-message" class="text-lg mt-4"></div>
+        </div>
     </div>
 
-    <div class="flex flex-col items-center space-y-6">
-        <form id="payment-form" method="post" class="payment-form w-full">
-            <input type="hidden" id="payment-id" name="Id" />
-            <input type="hidden" id="total-amount" name="TotalAmount" />
-
-            <div class="form-group mb-4">
-                <label for="credit-card" class="text-lg font-medium">Credit Card</label>
-                <p class="text-sm mb-2">Pay securely using your credit card</p>
-                <div id="bt-dropin" class="rounded-lg p-4 bg-white shadow-md"></div>
-            </div>
-
-            <div class="total-price text-xl font-bold mb-4">
-                Total: <span id="total-price-value">US $0.00</span>
-            </div>
-
-            <div class="form-buttons flex justify-between space-x-4">
-                <button type="button" class="cancel-button w-full py-2 bg-accent text-black rounded-lg hover:bg-[#b5a466] transition-colors" onclick="window.location.href='/'">Cancel</button>
-                <button type="submit" class="order-button w-full py-2 bg-accent text-black rounded-lg hover:bg-[#b5a466] transition-colors">Place Order</button>
-            </div>
-        </form>
-        
-        <!-- Transaction status message -->
-        <div id="transaction-message" class="text-lg mt-4"></div>
-    </div>
-</div>
-
-<script>
-    var client_token;
-    var form = document.querySelector('#payment-form');
-
-    // Initialize Braintree and fetch payment details on page load
-    async function initializeBraintree() {
-        try {
-            const urlParams = new URLSearchParams(window.location.search);
-            const paymentId = urlParams.get('paymentId') || 1;
-            const totalAmount = urlParams.get('totalAmount') || 0;
-
-            const response = await fetch(`https://localhost:7217/api/paymentpage/${paymentId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch payment details: ' + response.statusText);
-            }
-            const data = await response.json();
-
-            client_token = data.clientToken;
-            document.getElementById('payment-id').value = data.payment.Id;
-            document.getElementById('total-amount').value = totalAmount;
-            document.getElementById('total-price-value').textContent = `US $${parseFloat(totalAmount).toFixed(2)}`;
-
-            braintree.dropin.create({
-                authorization: client_token,
-                container: '#bt-dropin'
-            }, function (createErr, instance) {
-                if (createErr) {
-                    console.error("Braintree Drop-in UI Error: ", createErr);
-                    return;
+    <script>
+        function getCookie(name) {
+            const cookieArr = document.cookie.split(";");
+            for (const cookie of cookieArr) {
+                const [key, value] = cookie.split("=");
+                if (name.trim() === key.trim()) {
+                    return decodeURIComponent(value);
                 }
-
-                form.addEventListener('submit', function (event) {
-                    event.preventDefault();
-                    instance.requestPaymentMethod(function (err, payload) {
-                        if (err) {
-                            console.error("Error requesting payment method: ", err);
-                            return;
-                        }
-
-                        var nonceInput = document.createElement('input');
-                        nonceInput.setAttribute('type', 'hidden');
-                        nonceInput.setAttribute('name', 'Nonce');
-                        nonceInput.setAttribute('value', payload.nonce);
-                        form.appendChild(nonceInput);
-
-                        submitPayment();
-                    });
-                });
-            });
-        } catch (error) {
-            console.error("Error initializing Braintree: ", error);
-            alert("There was an issue initializing the payment. Please check the console for details.");
+            }
+            return null;
         }
-    }
 
-    async function submitPayment() {
-        try {
-            const response = await fetch('https://localhost:7217/api/paymentpage', {
+        function populatePaymentDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            document.getElementById('payment-id').value = urlParams.get('paymentId');
+            document.getElementById('total-amount').value = urlParams.get('totalAmount');
+            document.getElementById('item-name').textContent = urlParams.get('itemName');
+            document.getElementById('bid-amount').textContent = `Bid Amount: US $${urlParams.get('bidAmount')}`;
+            document.getElementById('item-image').src = urlParams.get('itemImage');
+            document.getElementById('contact-name').value = urlParams.get('contactName');
+            document.getElementById('mobile-number').value = urlParams.get('mobile');
+            document.getElementById('address').value = urlParams.get('address');
+            document.getElementById('zip-address').value = urlParams.get('zipAddress');
+            document.getElementById('total-price-value').textContent = urlParams.get('totalAmount');
+        }
+
+        window.addEventListener("DOMContentLoaded", populatePaymentDetails);
+
+        document.getElementById('payment-form').addEventListener('submit', submitPayment);
+
+        document.getElementById('payment-form').addEventListener('submit', submitPayment);
+
+        async function submitPayment(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Collect payment details
+            const paymentData = {
+                id: document.getElementById('payment-id').value, // Payment ID
+                // Remove userId as it's not needed on the server-side
+                itemName: document.getElementById('item-name').textContent, // Item Name
+                bidAmount: parseFloat(document.getElementById('bid-amount').textContent.replace('Bid Amount: US $', '')), // Bid Amount
+                itemImage: document.getElementById('item-image').src, // Item Image
+                contactName: document.getElementById('contact-name').value, // Contact Name
+                contactNumber: document.getElementById('mobile-number').value, // Contact Number
+                address: document.getElementById('address').value, // Address
+                zipCode: document.getElementById('zip-address').value // Zip Code
+            };
+
+            console.log("Data to be sent:", paymentData); // Log payment data for verification
+
+            const response = await fetch('https://localhost:7217/api/paymentpage/SubmitPayment', {
                 method: 'POST',
                 headers: {
+                    'accept': '*/*',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    Id: document.querySelector('#payment-id').value,
-                    TotalAmount: parseFloat(document.querySelector('#total-amount').value).toFixed(2),
-                    Nonce: document.querySelector('input[name="Nonce"]').value,
-                    Items: []
-                })
+                body: JSON.stringify(paymentData), // Convert to JSON string
             });
 
-            if (!response.ok) {
-                throw new Error('Transaction failed: ' + response.statusText);
+            if (response.ok) {
+                const result = await response.json();
+                displayTransactionMessage("Transaction Successful: " + result.message);
+                window.location.href = "WaitingForApproval.html"; // Redirect on success
+            } else {
+                const errorData = await response.json();
+                console.error("Error Response:", errorData);
+                alert(`Transaction failed. Status: ${response.status}, Error: ${errorData.error}`);
             }
-
-            const result = await response.json();
-            displayTransactionMessage('Transaction Successful: ' + result.message);
-        } catch (error) {
-            console.error("Error submitting payment: ", error);
-            displayTransactionMessage('Transaction Failed: ' + error.message);
         }
-    }
 
-    function displayTransactionMessage(message) {
-        const messageDiv = document.querySelector('#transaction-message');
-        messageDiv.textContent = message;
-        messageDiv.classList.remove('hidden');
-        messageDiv.classList.add('text-green-500');
-        if (message.startsWith('Transaction Failed')) {
-            messageDiv.classList.remove('text-green-500');
-            messageDiv.classList.add('text-red-500');
-        }
-    }
 
-    initializeBraintree();
-</script>
+
+    </script>
 </body>
+
 </html>

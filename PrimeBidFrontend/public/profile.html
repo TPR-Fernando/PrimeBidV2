@@ -7,6 +7,7 @@
     <title>Profile Page</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/common.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -34,6 +35,20 @@
                 },
             },
         }
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        function redirectIfCookieNotExists(cookieName) {
+            const cookieValue = getCookie(cookieName);
+            if (!cookieValue) {
+                window.location.href = "LoginPage.html"; // Redirect to index.html if the cookie is not found
+            }
+        }
+
+        redirectIfCookieNotExists("email");
     </script>
 </head>
 
@@ -202,7 +217,8 @@
                 fetch('https://localhost:7217/api/userlogin/logout', {
                     method: 'POST',
                 }).then(() => {
-                    window.location.href = "Login.html";
+                    deleteCookie("email");
+                    window.location.href = "index.html";
                 }).catch(error => {
                     console.error('Logout failed:', error);
                 });
@@ -210,6 +226,11 @@
 
             window.onload = getProfile;
             document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+            function deleteCookie(name) {
+                document.cookie = name + '=; Max-Age=0; path=/;'; // Set Max-Age to 0 to delete the cookie
+            }
+
         </script>
 </body>
 

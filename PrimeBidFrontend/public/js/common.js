@@ -31,6 +31,24 @@ document.addEventListener("DOMContentLoaded", function () {
                     link.classList.add('active'); // Add active class to the matching link
                 }
             });
+
+            // Check if the session is active
+            let isLoggedIn = false; // Check session storage (or your preferred method)
+
+            let email = getCookie("email");
+            if (email) {
+                console.log("Welcome back, " + email + "!");
+                isLoggedIn = true;
+            } else {
+                console.log("No user logged in.");
+            }
+
+            if (isLoggedIn) {
+                let signInButton = document.querySelector('.sign-in-button'); // Select the Sign In button
+                if (signInButton) {
+                    signInButton.style.display = 'none'; // Hide the Sign In button
+                }
+            }
         })
         .catch(error => console.error('Error loading navbar:', error));
 
@@ -57,3 +75,9 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error('Error loading footer:', error));
 });
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}

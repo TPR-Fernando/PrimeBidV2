@@ -2,16 +2,17 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #0b0817;
+    /* Dark background */
     color: white;
+    /* Text color */
     margin: 0;
     padding: 20px;
-    margin-top: 70px;
 }
 
 .auction-container {
     max-width: 1200px;
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 50px;
 }
 
 /* Back link */
@@ -19,70 +20,81 @@ body {
     text-align: left;
 }
 
-    .back-link a {
-        color: #ffffffd7;
-        text-decoration: none;
-        font-size: 16px;
-        display: inline-block;
-        margin-bottom: 20px;
-        padding: 10px 100px;
-    }
+.back-link a {
+    color: #d4af37;
+    /* Gold color */
+    text-decoration: none;
+    font-size: 16px;
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 0px;
+}
 
 /* Content layout */
 .auction-content {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    flex-wrap: nowrap; /* Ensure no wrapping */
+    flex-wrap: nowrap;
+    /* Ensure no wrapping */
 }
 
 /* Thumbnails */
 .thumbnail-images {
     display: flex;
     flex-direction: column;
-    margin-right: 10px; /* Reduced margin */
+    margin-right: 10px;
+    /* Reduced margin */
 }
 
-    .thumbnail-images img {
-        width: 70px;
-        height: 80px;
-        border-radius: 4px;
-        margin-bottom: 10px; /* Reduced space between thumbnails */
-        cursor: pointer;
-        border: 2px solid transparent;
-    }
+.thumbnail-images img {
+    width: 70px;
+    height: 80px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    /* Reduced space between thumbnails */
+    cursor: pointer;
+    border: 2px solid transparent;
+}
 
-        .thumbnail-images img:hover {
-            border: 2px solid #4639ad;
-        }
+.thumbnail-images img:hover {
+    border: 2px solid #d4af37;
+    /* Gold border on hover */
+}
 
 /* Main Image */
 .image-gallery {
     width: 30%;
-    margin-right: 20px; /* Reduce margin between gallery and details */
+    margin-right: 20px;
+    /* Reduce margin between gallery and details */
 }
 
 .main-image img {
     width: 100%;
     border-radius: 8px;
-    height: 400px; /* Adjusted for better fit */
-    object-fit: cover;
+    height: 400px;
+    /* Adjusted for better fit */
 }
 
 /* Auction Details */
 .auction-details {
-    width: 55%; /* Adjusted width to make everything fit in one row */
-    padding: 10px;
+    width: 60%;
+    /* Adjusted width to make everything fit in one row */
+    padding: 20px;
     border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Lighten background for contrast */
 }
 
-    /* Heading */
-    .auction-details h1 {
-        font-size: 24px;
-        margin-bottom: 12px;
-        color: #fff;
-        border-bottom: 1px solid #ffffffd7;
-    }
+/* Heading */
+.auction-details h1 {
+    font-size: 24px;
+    margin-bottom: 12px;
+    color: #d4af37;
+    /* Gold color */
+    border-bottom: 1px solid #d4af37;
+    /* Gold border */
+}
 
 /* Bid Information aligned */
 .bid-info-row {
@@ -98,11 +110,11 @@ body {
     color: rgba(255, 255, 255, 0.838);
 }
 
-    .current-bid span,
-    .estimate span {
-        font-weight: bold;
-        color: white;
-    }
+.current-bid span,
+.estimate span {
+    font-weight: bold;
+    color: white;
+}
 
 /* Updated Bid Section */
 .bid-section {
@@ -110,43 +122,53 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* Allows elements to wrap on smaller screens */
+    flex-wrap: wrap;
+    /* Allows elements to wrap on smaller screens */
 }
 
-    .bid-section label {
-        font-size: 14px;
-        display: block;
-        width: 100%; /* Make the label take up full width */
-        margin-bottom: 10px;
-    }
+.bid-section label {
+    font-size: 14px;
+    display: block;
+    width: 100%;
+    /* Make the label take up full width */
+    margin-bottom: 10px;
+}
 
-    .bid-section select,
-    .place-bid-btn {
-        width: 48%; /* Both the drop-down and button take 48% width for equal spacing */
-    }
+.bid-section select,
+.place-bid-btn {
+    width: 48%;
+    /* Both the drop-down and button take 48% width for equal spacing */
+}
 
-    .bid-section select {
-        padding: 8px;
-        border-radius: 4px;
-        border: 1px solid #4a7aff;
-        background-color: #2e2f3e;
-        color: white;
-    }
+.bid-section select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #d4af37;
+    /* Gold border */
+    background-color: #2e2f3e;
+    /* Dark background */
+    color: white;
+    /* Text color */
+}
 
 .place-bid-btn {
-    background-color: #C7FFD8;
+    background-color: #d4af37;
+    /* Gold background */
     color: #000;
+    /* Text color */
     padding: 9px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-    text-align: center; /* Center the text inside the button */
+    text-align: center;
+    /* Center the text inside the button */
 }
 
-    .place-bid-btn:hover {
-        background-color: #28c66ac5;
-    }
+.place-bid-btn:hover {
+    background-color: #cda052;
+    /* Darker gold on hover */
+}
 
 /* Description */
 .description {
@@ -154,6 +176,7 @@ body {
     line-height: 1.5;
     margin-bottom: 20px;
     color: #ccc;
+    /* Light gray */
 }
 
 /* Ends In and Watchlist */
@@ -167,12 +190,14 @@ body {
     font-size: 14px;
 }
 
-    .ends-in strong {
-        color: #90d5abd1;
-    }
+.ends-in strong {
+    color: #d4af37;
+    /* Gold */
+}
 
 .watchlist a {
-    color: #93688e;
+    color: #d4af37;
+    /* Gold */
     text-decoration: none;
     font-size: 14px;
 }
